@@ -19,5 +19,6 @@ use App\Http\Controllers\EunomiaController;
 Route::post('eunomia/register', [EunomiaController::class, 'register']);
 Route::post('eunomia/login', [EunomiaController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
+	Route::post('eunomia', [EunomiaController::class, 'index']);
 	Route::post('eunomia/logout', [EunomiaController::class, 'logout']);
 });

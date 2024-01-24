@@ -65,12 +65,12 @@ class EunomiaController extends Controller
 
     public function login(Request $request)
     {
-    	if(!Auth::attempt($request->only('uid')))
-        {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
-
         $user = User::where('uid', $request['uid'])->firstOrFail();
+
+        if(!$user)
+        {
+        	return response()->json(['message' => 'Unauthorized'], 401);
+        }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
