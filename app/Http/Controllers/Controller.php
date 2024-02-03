@@ -10,7 +10,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function random_alpha($length = 6)
+    public function randomAlpha($length = 6)
     {
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
