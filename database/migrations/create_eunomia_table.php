@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
-            $table->integer('type');
+            $table->integer('type')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

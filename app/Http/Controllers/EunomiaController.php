@@ -11,21 +11,38 @@ use App\Models\User;
 
 class EunomiaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return User::all();
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+        $user = $token->tokenable;
+
+        return response()->json($user);
     }
 
     public function show(User $user)
     {
         return $user;
     }
-
+    
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'uid' => 'required|string|max:255|unique:users',
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|sometimes|email|max:255|unique:users',
+            'phone' => 'nullable|sometimes|string|max:255|unique:users',
+        ]);
+
+        if($validator->fails()){
+            return response()->json(['message' => $validator->errors()->first()], 400);
+        }
+
         $user = User::create($request->all());
 
-        return response()->json($user, 201);
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json(['data' => $user, 'access_token' => $token, 'token_type' => 'Bearer', ], 201);
+
     }
 
     public function update(Request $request, User $user)
@@ -42,30 +59,17 @@ class EunomiaController extends Controller
         return response()->json(null, 204);
     }
 
-	public function register(Request $request)
+    public function login(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'uid' => 'required|string|max:255|unique:users',
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|sometimes|email|max:255|unique:users',
-            'phone' => 'nullable|sometimes|email|max:255|unique:users',
+            'uid' => 'required|string|max:255',
         ]);
 
         if($validator->fails()){
-			return response()->json(['message' => $validator->errors()->first()], 400);
+            return response()->json(['message' => $validator->errors()->first()], 400);
         }
 
-        $user = User::create($request->all());
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json(['data' => $user, 'access_token' => $token, 'token_type' => 'Bearer', ], 201);
-
-    }
-
-    public function login(Request $request)
-    {
-        $user = User::where('uid', $request['uid'])->firstOrFail();
+        $user = User::where('uid', $request['uid'])->first();
 
         if(!$user)
         {
