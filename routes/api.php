@@ -3,8 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\EunomiaController;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,6 +14,7 @@ use App\Http\Controllers\EunomiaController;
 |
 */
 
+use App\Http\Controllers\EunomiaController;
 Route::post('eunomia/register', [EunomiaController::class, 'register']);
 Route::post('eunomia/login', [EunomiaController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -26,4 +25,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {
 	Route::get('eunomia/all', [EunomiaController::class, 'index']);
 	Route::post('eunomia/{user}', [EunomiaController::class, 'update']);
+	Route::delete('eunomia/{user}', [EunomiaController::class, 'delete']);
 });
