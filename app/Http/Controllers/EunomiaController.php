@@ -11,17 +11,17 @@ use App\Models\User;
 
 class EunomiaController extends Controller
 {
-    public function index(Request $request)
+    public function index()
+    {
+        return User::all();
+    }
+
+    public function show(Request $request)
     {
         $token = PersonalAccessToken::findToken($request->bearerToken());
         $user = $token->tokenable;
 
-        return response()->json($user);
-    }
-
-    public function show(User $user)
-    {
-        return $user;
+        return response()->json($user, 200);
     }
     
     public function store(Request $request)
@@ -45,8 +45,14 @@ class EunomiaController extends Controller
 
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user = NULL)
     {
+        if(!$user)
+        {
+            $token = PersonalAccessToken::findToken($request->bearerToken());
+            $user = $token->tokenable;
+        }
+
         $user->update($request->all());
 
         return response()->json($user, 200);
