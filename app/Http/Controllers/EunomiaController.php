@@ -8,6 +8,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 use Validator;
 use Auth;
 use App\Models\User;
+use App\Models\Setting;
 
 class EunomiaController extends Controller
 {
@@ -38,6 +39,7 @@ class EunomiaController extends Controller
         }
 
         $user = User::create($request->only('uid', 'name', 'email', 'phone'));
+        $setting = Setting::create([ 'users_id' => $user->id ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -117,5 +119,10 @@ class EunomiaController extends Controller
         auth()->user()->tokens()->delete();
 
         return response()->json(null, 204);
+    }
+
+    public function agree_terms()
+    {
+
     }
 }

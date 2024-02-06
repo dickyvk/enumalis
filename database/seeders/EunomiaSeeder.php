@@ -4,10 +4,12 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Test;
+use App\Models\Setting;
 
 class EunomiaSeeder extends Seeder
 {
+    private static $ROW = 10;
+
     public function run(): void
     {
         // \App\Models\User::factory(10)->create();
@@ -17,7 +19,7 @@ class EunomiaSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        User::factory(10)->create();
-        //Test::factory(10)->create();
+        User::factory(self::$ROW)->create();
+        Setting::factory(self::$ROW)->create();
     }
 }

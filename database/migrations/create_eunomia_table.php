@@ -11,21 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('uid')->unique();
-            $table->string('name');
-            $table->string('email')->nullable();
-            $table->string('phone')->nullable();
-            $table->integer('type')->default(0);
-            $table->rememberToken();
-            $table->timestamps();
-        });
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
         Schema::create('failed_jobs', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique();
@@ -34,6 +19,11 @@ return new class extends Migration
             $table->longText('payload');
             $table->longText('exception');
             $table->timestamp('failed_at')->useCurrent();
+        });
+        Schema::create('password_reset_tokens', function (Blueprint $table) {
+            $table->string('email')->primary();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
         });
         Schema::dropIfExists('personal_access_tokens');
         Schema::create('personal_access_tokens', function (Blueprint $table) {
@@ -46,6 +36,22 @@ return new class extends Migration
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('uid')->unique();
+            $table->string('name');
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->integer('type')->default(0);
+            $table->rememberToken();
+            $table->timestamps();
+        });
+        Schema::create('settings', function (Blueprint $table) {
+            $table->foreignId('users_id')->constrained()->onDelete('cascade');
+            $table->integer('terms')->default(0);
+            $table->integer('policy')->default(0);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -53,9 +59,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('failed_jobs');
+        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('personal_access_tokens');
+        Schema::dropIfExists('settings');
+        Schema::dropIfExists('users');
     }
 };

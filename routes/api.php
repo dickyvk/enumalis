@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 use App\Http\Controllers\EunomiaController;
-Route::post('eunomia/register', [EunomiaController::class, 'register']);
+Route::post('eunomia/register', [EunomiaController::class, 'store']);
 Route::post('eunomia/login', [EunomiaController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::get('eunomia', [EunomiaController::class, 'show']);
