@@ -7,12 +7,13 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Rule;
 
 class EunomiaTest extends TestCase
 {
-    public function test_register_login_logout_successful()
+    public function test_user_successful()
     {
-        //Register
+        //Store
         $payload = [
             'uid' => Str::random(35),
             'name' => fake()->name(),
@@ -30,7 +31,7 @@ class EunomiaTest extends TestCase
                     'created_at',
                     'updated_at',
                 ],
-            ]);;
+            ]);
 
         //Login
         $payload = [
@@ -49,6 +50,7 @@ class EunomiaTest extends TestCase
                 ],
             ]);
 
+        //Show
         $user = User::where('uid', $payload['uid'])->first();
         $token = $user->createToken('auth_token')->plainTextToken;
         $headers = ['Authorization' => "Bearer $token"];
@@ -62,7 +64,34 @@ class EunomiaTest extends TestCase
                 'created_at',
                 'updated_at',
             ]);
+
+        //Update
+        $payload = [
+            'name' => fake()->name(),
+            'email' => fake()->optional()->safeEmail(),
+            'phone' => fake()->optional()->phoneNumber(),
+        ];
+        $this->json('post', 'eunomia', $payload, $headers)->assertStatus(200);
+        $user = User::where('id', $user->id)->first();
+        foreach($payload as $key => $value) {
+            $this->assertEquals($payload[$key], $user->$key);
+        }
+
+        //Rule
+        $payload = [
+            'terms' => fake()->numberBetween($min = 0, $max = 1),
+            'policy' => fake()->numberBetween($min = 0, $max = 1),
+        ];
+        $this->json('post', 'eunomia/rule', $payload, $headers)->assertStatus(200);
+        $rule = Rule::where('users_id', $user->id)->first();
+        foreach($payload as $key => $value) {
+            $this->assertEquals($payload[$key], $rule->$key);
+        }
+        
+        //Logout
         $this->json('post', 'eunomia/logout', [], $headers)->assertStatus(204);
         $this->json('get', 'eunomia', [], $headers)->assertStatus(500);
+
+        $user->delete();
     }
 }
