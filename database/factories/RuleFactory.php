@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\User;
 
-class SettingFactory extends Factory
+class RuleFactory extends Factory
 {
     public function definition(): array
     {

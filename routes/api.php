@@ -20,6 +20,7 @@ Route::post('eunomia/login', [EunomiaController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::get('eunomia', [EunomiaController::class, 'show']);
 	Route::post('eunomia', [EunomiaController::class, 'update']);
+	Route::post('eunomia/rule', [EunomiaController::class, 'rule']);
 	Route::post('eunomia/logout', [EunomiaController::class, 'logout']);
 });
 Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {

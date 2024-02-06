@@ -8,7 +8,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 use Validator;
 use Auth;
 use App\Models\User;
-use App\Models\Setting;
+use App\Models\Rule;
 
 class EunomiaController extends Controller
 {
@@ -39,12 +39,11 @@ class EunomiaController extends Controller
         }
 
         $user = User::create($request->only('uid', 'name', 'email', 'phone'));
-        $setting = Setting::create([ 'users_id' => $user->id ]);
+        $rule = Rule::create(['users_id' => $user->id]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json(['data' => $user, 'access_token' => $token, 'token_type' => 'Bearer', ], 201);
-
     }
 
     public function update(Request $request, User $user = NULL)
@@ -121,8 +120,22 @@ class EunomiaController extends Controller
         return response()->json(null, 204);
     }
 
-    public function agree_terms()
+    public function rule(Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'terms' => 'nullable|boolean',
+            'policy' => 'nullable|boolean',
+        ]);
 
+        if($validator->fails()){
+            return response()->json(['message' => $validator->errors()->first()], 400);
+        }
+
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+        $user = $token->tokenable;
+        $rule = Rule::where('users_id', $user->id)->first();
+        $rule->update($request->only('terms', 'policy'));
+
+        return response()->json($rule, 200);
     }
 }

@@ -46,7 +46,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-        Schema::create('settings', function (Blueprint $table) {
+        Schema::create('rules', function (Blueprint $table) {
             $table->foreignId('users_id')->constrained()->onDelete('cascade');
             $table->integer('terms')->default(0);
             $table->integer('policy')->default(0);
@@ -62,7 +62,7 @@ return new class extends Migration
         Schema::dropIfExists('failed_jobs');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('personal_access_tokens');
-        Schema::dropIfExists('settings');
+        Schema::dropIfExists('rules');
         Schema::dropIfExists('users');
     }
 };
