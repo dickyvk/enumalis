@@ -11,8 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('zeus', function (Blueprint $table) {
+        Schema::create('profiles', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('users_id')->constrained()->onDelete('cascade');
+            $table->string('name')->nullable();
+            $table->string('place_of_birth')->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->tinyInteger('gender')->nullable();
+            $table->tinyInteger('blood_type')->nullable();
+            $table->tinyInteger('identity_type')->nullable();
+            $table->string('identity_number')->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('zeus');
+        Schema::dropIfExists('profiles');
     }
 };

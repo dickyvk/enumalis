@@ -42,14 +42,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
-            $table->integer('type')->default(0);
+            $table->tinyInteger('type')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
         Schema::create('rules', function (Blueprint $table) {
             $table->foreignId('users_id')->constrained()->onDelete('cascade');
-            $table->integer('terms')->default(0);
-            $table->integer('policy')->default(0);
+            $table->boolean('terms')->default(0);
+            $table->boolean('policy')->default(0);
             $table->timestamps();
         });
     }

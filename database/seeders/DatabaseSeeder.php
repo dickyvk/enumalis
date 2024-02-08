@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             EunomiaSeeder::class,
+            ZeusSeeder::class,
         ]);
     }
 }
