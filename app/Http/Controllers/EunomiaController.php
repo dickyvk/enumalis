@@ -12,20 +12,7 @@ use App\Models\Rule;
 
 class EunomiaController extends Controller
 {
-    public function index()
-    {
-        return User::all();
-    }
-
-    public function show(Request $request)
-    {
-        $token = PersonalAccessToken::findToken($request->bearerToken());
-        $user = $token->tokenable;
-
-        return response()->json($user, 200);
-    }
-    
-    public function store(Request $request)
+    public function register(Request $request)
     {
         $validator = Validator::make($request->all(),[
             'uid' => 'required|string|max:255|unique:users',
@@ -44,6 +31,43 @@ class EunomiaController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json(['data' => $user, 'access_token' => $token, 'token_type' => 'Bearer', ], 201);
+    }
+
+    public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'uid' => 'required|string|max:255',
+        ]);
+
+        if($validator->fails()){
+            return response()->json(['message' => $validator->errors()->first()], 400);
+        }
+
+        $user = User::where('uid', $request['uid'])->first();
+
+        if(!$user)
+        {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json(['data' => $user, 'access_token' => $token, 'token_type' => 'Bearer', ], 200);
+    }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+
+        return response()->json(null, 204);
+    }
+
+    public function show(Request $request)
+    {
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+        $user = $token->tokenable;
+
+        return response()->json($user, 200);
     }
 
     public function update(Request $request, User $user = NULL)
@@ -84,42 +108,6 @@ class EunomiaController extends Controller
         return response()->json($user, 200);
     }
 
-    public function delete(User $user)
-    {
-        $user->delete();
-
-        return response()->json(null, 204);
-    }
-
-    public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(),[
-            'uid' => 'required|string|max:255',
-        ]);
-
-        if($validator->fails()){
-            return response()->json(['message' => $validator->errors()->first()], 400);
-        }
-
-        $user = User::where('uid', $request['uid'])->first();
-
-        if(!$user)
-        {
-        	return response()->json(['message' => 'Unauthorized'], 401);
-        }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json(['data' => $user, 'access_token' => $token, 'token_type' => 'Bearer', ], 200);
-    }
-
-    public function logout()
-    {
-        auth()->user()->tokens()->delete();
-
-        return response()->json(null, 204);
-    }
-
     public function rule(Request $request)
     {
         $validator = Validator::make($request->all(),[
@@ -137,5 +125,17 @@ class EunomiaController extends Controller
         $rule->update($request->only('terms', 'policy'));
 
         return response()->json($rule, 200);
+    }
+
+    public function show_all()
+    {
+        return User::all();
+    }
+
+    public function delete(User $user)
+    {
+        $user->delete();
+
+        return response()->json(null, 204);
     }
 }
