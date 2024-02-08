@@ -9,6 +9,8 @@ class Profile extends Model
 {
     use HasFactory;
 
+    protected $connection = 'zeus';
+
     protected $fillable = [
         'users_id',
         'name',

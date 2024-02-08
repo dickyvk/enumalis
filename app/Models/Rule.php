@@ -9,6 +9,8 @@ class Rule extends Model
 {
     use HasFactory;
 
+    protected $connection = 'eunomia';
+
     //public $timestamps = false;
     protected $primaryKey = 'users_id';
 

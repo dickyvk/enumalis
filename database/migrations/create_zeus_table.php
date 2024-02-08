@@ -3,17 +3,21 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
+    protected $connection = 'zeus';
+
     /**
      * Run the migrations.
      */
     public function up(): void
     {
+        DB::connection('mysql')->statement('CREATE DATABASE IF NOT EXISTS '.$this->connection);
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('users_id')->constrained()->onDelete('cascade');
+            $table->foreignId('users_id')->constrained(table: 'eunomia.users')->onDelete('cascade');
             $table->string('name')->nullable();
             $table->string('place_of_birth')->nullable();
             $table->date('date_of_birth')->nullable();
