@@ -32,4 +32,13 @@ class ZeusController extends Controller
 
         return response()->json($profile, 201);
     }
+
+    public function getProfile(Request $request)
+    {
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+        $user = $token->tokenable;
+        $profile = Profile::where('users_id', $user->id)->get();
+
+        return response()->json($profile, 200);
+    }
 }

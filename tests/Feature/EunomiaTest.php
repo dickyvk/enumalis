@@ -15,7 +15,6 @@ class EunomiaTest extends TestCase
     {
         $payload = [
             'uid' => Str::random(35),
-            'name' => fake()->name(),
             'email' => fake()->optional()->safeEmail(),
             'phone' => fake()->optional()->phoneNumber(),
         ];
@@ -24,7 +23,6 @@ class EunomiaTest extends TestCase
             ->assertJsonStructure([
                 'data' => [
                     'id',
-                    'name',
                     'email',
                     'phone',
                     'created_at',
@@ -47,7 +45,6 @@ class EunomiaTest extends TestCase
             ->assertJsonStructure([
                 'data' => [
                     'id',
-                    'name',
                     'email',
                     'phone',
                     'created_at',
@@ -67,7 +64,6 @@ class EunomiaTest extends TestCase
             ->assertStatus(200)
             ->assertJsonStructure([
                 'id',
-                'name',
                 'email',
                 'phone',
                 'created_at',
@@ -83,7 +79,6 @@ class EunomiaTest extends TestCase
         $headers = ['Authorization' => "Bearer $token"];
 
         $payload = [
-            'name' => fake()->name(),
             'email' => fake()->optional()->safeEmail(),
             'phone' => fake()->optional()->phoneNumber(),
         ];
@@ -161,7 +156,6 @@ class EunomiaTest extends TestCase
         $headers = ['Authorization' => "Bearer $token"];
 
         $payload = [
-            'name' => fake()->name(),
             'email' => fake()->optional()->safeEmail(),
             'phone' => fake()->optional()->phoneNumber(),
         ];

@@ -43,7 +43,6 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('uid')->unique();
-            $table->string('name');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->tinyInteger('type')->default(0);

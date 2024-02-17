@@ -16,7 +16,6 @@ class EunomiaController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'uid' => 'required|string|max:255|unique:users',
-            'name' => 'required|string|max:255',
             'email' => 'nullable|sometimes|email|max:255|unique:users',
             'phone' => 'nullable|sometimes|string|max:255|unique:users',
         ]);
@@ -25,7 +24,7 @@ class EunomiaController extends Controller
             return response()->json(['message' => $validator->errors()->first()], 400);
         }
 
-        $user = User::create($request->only('uid', 'name', 'email', 'phone'));
+        $user = User::create($request->only('uid', 'email', 'phone'));
         $rule = Rule::create(['users_id' => $user->id]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -75,7 +74,6 @@ class EunomiaController extends Controller
         if(!$user)
         {
             $validator = Validator::make($request->all(),[
-                'name' => 'nullable|string|max:255',
                 'email' => 'nullable|sometimes|email|max:255|unique:users',
                 'phone' => 'nullable|sometimes|string|max:255|unique:users',
             ]);
@@ -92,7 +90,6 @@ class EunomiaController extends Controller
         {
             $validator = Validator::make($request->all(),[
                 'uid' => 'nullable|string|max:255|unique:users',
-                'name' => 'nullable|string|max:255',
                 'email' => 'nullable|sometimes|email|max:255|unique:users',
                 'phone' => 'nullable|sometimes|string|max:255|unique:users',
                 'type' => 'nullable|integer',

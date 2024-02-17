@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function 
 
 use App\Http\Controllers\ZeusController;
 Route::group(['middleware' => ['auth:sanctum']], function () {
+	Route::get('zeus/profile', [ZeusController::class, 'getProfile']);
 	Route::post('zeus/profile/add', [ZeusController::class, 'addProfile']);
 });
 Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {

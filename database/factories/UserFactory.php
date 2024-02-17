@@ -25,7 +25,6 @@ class UserFactory extends Factory
     {
         return [
             'uid' => Str::random(35),
-            'name' => fake()->name(),
             'email' => fake()->optional()->safeEmail(),
             'phone' => fake()->optional()->phoneNumber(),
             'type' => fake()->numberBetween($min = 0, $max = 2),

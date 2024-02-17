@@ -18,12 +18,12 @@ return new class extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('users_id')->constrained(table: 'eunomia.users')->onDelete('cascade');
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->string('place_of_birth')->nullable();
-            $table->date('date_of_birth')->nullable();
-            $table->tinyInteger('gender')->nullable();
-            $table->tinyInteger('blood_type')->nullable();
-            $table->tinyInteger('identity_type')->nullable();
+            $table->date('date_of_birth');
+            $table->tinyInteger('gender')->default(0);
+            $table->tinyInteger('blood_type')->default(0);
+            $table->tinyInteger('identity_type')->default(0);
             $table->string('identity_number')->nullable();
             $table->timestamps();
         });
