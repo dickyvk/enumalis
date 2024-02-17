@@ -19,7 +19,7 @@ class ZeusController extends Controller
             'gender' => 'nullable|integer|between:1,2',
             'blood_type' => 'nullable|integer|between:1,4',
             'identity_type' => 'nullable|integer|between:1,2',
-            'identity_number' => 'nullable|sometimes|integer|max:16|unique:profiles',
+            'identity_number' => 'nullable|sometimes|integer|max_digits:16|unique:profiles',
         ]);
 
         if($validator->fails()){

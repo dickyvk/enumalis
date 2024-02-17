@@ -21,7 +21,7 @@ class ProfileFactory extends Factory
             'users_id' => fake()->numberBetween(1, User::count()),
             'name' => fake()->name(),
             'place_of_birth' => fake()->city(),
-            'date_of_birth' => fake()->dateTimeThisCentury(),
+            'date_of_birth' => fake()->dateTimeThisCentury()->format('Y-m-d'),
             'gender' => fake()->numberBetween($min = 1, $max = 2),
             'blood_type' => fake()->numberBetween($min = 1, $max = 4),
             'identity_type' => fake()->numberBetween($min = 1, $max = 2),

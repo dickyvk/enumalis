@@ -40,7 +40,7 @@ class EunomiaTest extends TestCase
         $payload = [
             'uid' => $user->uid,
         ];
-        $this->json('POST', 'eunomia/login', $payload)
+        $this->json('post', 'eunomia/login', $payload)
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
