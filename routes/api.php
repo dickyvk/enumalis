@@ -24,7 +24,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('eunomia/logout', [EunomiaController::class, 'logout']);
 });
 Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {
-	Route::get('eunomia/all', [EunomiaController::class, 'show_all']);
+	Route::get('eunomia/all', [EunomiaController::class, 'showAll']);
 	Route::post('eunomia/{user}', [EunomiaController::class, 'update']);
 	Route::delete('eunomia/{user}', [EunomiaController::class, 'delete']);
+});
+
+use App\Http\Controllers\ZeusController;
+Route::group(['middleware' => ['auth:sanctum']], function () {
+	Route::post('zeus/profile/add', [ZeusController::class, 'addProfile']);
+});
+Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {
 });

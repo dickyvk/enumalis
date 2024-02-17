@@ -127,7 +127,7 @@ class EunomiaController extends Controller
         return response()->json($rule, 200);
     }
 
-    public function show_all()
+    public function showAll()
     {
         return User::all();
     }
