@@ -24,7 +24,7 @@ return new class extends Migration
             $table->tinyInteger('gender')->default(0);
             $table->tinyInteger('blood_type')->default(0);
             $table->tinyInteger('identity_type')->default(0);
-            $table->string('identity_number')->nullable();
+            $table->string('identity_number', 16)->nullable();
             $table->timestamps();
         });
     }

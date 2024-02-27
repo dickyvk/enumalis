@@ -15,9 +15,9 @@ class EunomiaController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'uid' => 'required|string|max:255|unique:users',
-            'email' => 'nullable|sometimes|email|max:255|unique:users',
-            'phone' => 'nullable|sometimes|string|max:255|unique:users',
+            'uid' => 'required|string|max:255|unique:eunomia.users',
+            'email' => 'nullable|sometimes|email|max:255|unique:eunomia.users',
+            'phone' => 'nullable|sometimes|string|max:255|unique:eunomia.users',
         ]);
 
         if($validator->fails()){
@@ -74,8 +74,8 @@ class EunomiaController extends Controller
         if(!$user)
         {
             $validator = Validator::make($request->all(),[
-                'email' => 'nullable|sometimes|email|max:255|unique:users',
-                'phone' => 'nullable|sometimes|string|max:255|unique:users',
+                'email' => 'nullable|sometimes|email|max:255|unique:eunomia.users',
+                'phone' => 'nullable|sometimes|string|max:255|unique:eunomia.users',
             ]);
 
             if($validator->fails()){
@@ -89,9 +89,9 @@ class EunomiaController extends Controller
         else
         {
             $validator = Validator::make($request->all(),[
-                'uid' => 'nullable|string|max:255|unique:users',
-                'email' => 'nullable|sometimes|email|max:255|unique:users',
-                'phone' => 'nullable|sometimes|string|max:255|unique:users',
+                'uid' => 'nullable|string|max:255|unique:eunomia.users',
+                'email' => 'nullable|sometimes|email|max:255|unique:eunomia.users',
+                'phone' => 'nullable|sometimes|string|max:255|unique:eunomia.users',
                 'type' => 'nullable|integer',
             ]);
 

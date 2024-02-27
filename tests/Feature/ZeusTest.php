@@ -28,19 +28,17 @@ class ZeusTest extends TestCase
         $array = $this->json('post', 'zeus/profile/add', $payload, $headers)
             ->assertStatus(201)
             ->assertJsonStructure([
-                'data' => [
-                    'id',
-                    'users_id',
-                    'name',
-                    'place_of_birth',
-                    'date_of_birth',
-                    'gender',
-                    'blood_type',
-                    'identity_type',
-                    'identity_number',
-                    'created_at',
-                    'updated_at',
-                ],
+                'id',
+                'users_id',
+                'name',
+                'place_of_birth',
+                'date_of_birth',
+                'gender',
+                'blood_type',
+                'identity_type',
+                'identity_number',
+                'created_at',
+                'updated_at',
             ]);
 
         $user->delete();
