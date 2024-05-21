@@ -33,6 +33,12 @@ use App\Http\Controllers\ZeusController;
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::get('zeus/profile', [ZeusController::class, 'getProfile']);
 	Route::post('zeus/profile/add', [ZeusController::class, 'addProfile']);
+	Route::get('zeus/notification', [ZeusController::class, 'getNotification']);
+	Route::get('zeus/notification/{notification}', [ZeusController::class, 'showNotification']);
+	Route::put('zeus/notification/{notification}', [ZeusController::class, 'updateNotification']);
+	Route::delete('zeus/notification/{notification}', [ZeusController::class, 'deleteNotification']);
 });
 Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {
+	Route::post('zeus/notification/send', [ZeusController::class, 'sendNotification']);
+	Route::post('zeus/notification/blast', [ZeusController::class, 'blastNotification']);
 });

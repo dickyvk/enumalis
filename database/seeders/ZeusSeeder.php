@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Profile;
+use App\Models\Notification;
 
 class ZeusSeeder extends Seeder
 {
@@ -15,5 +16,6 @@ class ZeusSeeder extends Seeder
     public function run(): void
     {
         Profile::factory(self::$ZEUS_ROW)->create();
+        Notification::factory(self::$ZEUS_ROW)->create();
     }
 }

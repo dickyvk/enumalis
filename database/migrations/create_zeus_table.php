@@ -27,6 +27,14 @@ return new class extends Migration
             $table->string('identity_number', 16)->nullable();
             $table->timestamps();
         });
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('profiles_id')->constrained(table: 'zeus.profiles')->onDelete('cascade');
+            $table->text('title')->nullable();
+            $table->text('body');
+            $table->boolean('opened')->default(0);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -34,6 +42,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('notifications');
         Schema::dropIfExists('profiles');
     }
 };
