@@ -127,7 +127,8 @@ class ZeusController extends Controller
     {
         $token = PersonalAccessToken::findToken($request->bearerToken());
         $user = $token->tokenable;
-        $notification = Notification::where('profiles_id', $user->id)->orderBy('created_at', 'DESC')->get();
+        $profile = Profile::where('users_id', $user->id)->get('id');
+        $notification = Notification::whereIn('profiles_id', $profile)->orderBy('created_at', 'DESC')->get();
 
         return response()
             ->json($notification);
