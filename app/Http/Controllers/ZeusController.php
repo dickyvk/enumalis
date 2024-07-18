@@ -11,27 +11,50 @@ use App\Models\Notification;
 
 class ZeusController extends Controller
 {
-    public function addProfile(Request $request)
+    public function setProfile(Request $request, Profile $profile = NULL)
     {
-        $validator = Validator::make($request->all(),[
-            'name' => 'required|string|max:255',
-            'place_of_birth' => 'nullable|string|max:255',
-            'date_of_birth' => 'required|date_format:Y-m-d',
-            'gender' => 'nullable|integer|between:1,2',
-            'blood_type' => 'nullable|integer|between:1,4',
-            'identity_type' => 'nullable|integer|between:1,2',
-            'identity_number' => 'nullable|sometimes|string|max:16|unique:zeus.profiles',
-        ]);
+        if(!$profile)
+        {
+            $validator = Validator::make($request->all(),[
+                'name' => 'required|string|max:255',
+                'place_of_birth' => 'nullable|string|max:255',
+                'date_of_birth' => 'required|date_format:Y-m-d',
+                'gender' => 'nullable|integer|between:1,2',
+                'blood_type' => 'nullable|integer|between:1,4',
+                'identity_type' => 'nullable|integer|between:1,2',
+                'identity_number' => 'nullable|sometimes|string|max:16|unique:zeus.profiles',
+            ]);
 
-        if($validator->fails()){
-            return response()->json(['message' => $validator->errors()->first()], 400);
+            if($validator->fails()){
+                return response()->json(['message' => $validator->errors()->first()], 400);
+            }
+
+            $token = PersonalAccessToken::findToken($request->bearerToken());
+            $user = $token->tokenable;
+            $profile = Profile::create(array_merge($request->all(), ['users_id' => $user->id]));
+
+            return response()->json($profile, 201);
         }
+        else
+        {
+            $validator = Validator::make($request->all(),[
+                'name' => 'required|string|max:255',
+                'place_of_birth' => 'nullable|string|max:255',
+                'date_of_birth' => 'required|date_format:Y-m-d',
+                'gender' => 'nullable|integer|between:1,2',
+                'blood_type' => 'nullable|integer|between:1,4',
+                'identity_type' => 'nullable|integer|between:1,2',
+                'identity_number' => 'nullable|sometimes|string|max:16|unique:zeus.profiles',
+            ]);
 
-        $token = PersonalAccessToken::findToken($request->bearerToken());
-        $user = $token->tokenable;
-        $profile = Profile::create(array_merge($request->all(), ['users_id' => $user->id]));
+            if($validator->fails()){
+                return response()->json(['message' => $validator->errors()->first()], 400);
+            }
+            
+            $profile->update($request->all());
 
-        return response()->json($profile, 201);
+            return response()->json($profile, 200);
+        }
     }
 
     public function getProfile(Request $request)
@@ -41,6 +64,13 @@ class ZeusController extends Controller
         $profile = Profile::where('users_id', $user->id)->get();
 
         return response()->json($profile, 200);
+    }
+
+    public function deleteProfile(Profile $profile)
+    {
+        $profile->delete();
+
+        return response()->json(null, 204);
     }
 
     public function sendNotification(Request $request)

@@ -32,7 +32,9 @@ Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function 
 use App\Http\Controllers\ZeusController;
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::get('zeus/profile', [ZeusController::class, 'getProfile']);
-	Route::post('zeus/profile/add', [ZeusController::class, 'addProfile']);
+	Route::post('zeus/profile', [ZeusController::class, 'setProfile']);
+	Route::post('zeus/profile/{profile}', [ZeusController::class, 'setProfile']);
+	Route::delete('zeus/profile/{profile}', [ZeusController::class, 'deleteProfile']);
 	Route::get('zeus/notification', [ZeusController::class, 'getNotification']);
 	Route::get('zeus/notification/{notification}', [ZeusController::class, 'showNotification']);
 	Route::put('zeus/notification/{notification}', [ZeusController::class, 'updateNotification']);
