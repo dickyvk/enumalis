@@ -26,7 +26,7 @@ class ZeusTest extends TestCase
             'identity_type' => fake()->numberBetween($min = 1, $max = 2),
             'identity_number' => fake()->numerify('3273############'),
         ];
-        $array = $this->json('post', 'zeus/profile/add', $payload, $headers)
+        $array = $this->json('post', 'zeus/profile', $payload, $headers)
             ->assertStatus(201)
             ->assertJsonStructure([
                 'id',
@@ -54,6 +54,42 @@ class ZeusTest extends TestCase
         $this->json('get', 'zeus/profile', [], $headers)
             ->assertStatus(200)
             ->assertJsonIsArray();
+
+        $user->delete();
+    }
+    public function test_update_user_profile()
+    {
+        $user = User::factory()->create();
+        $profile = Profile::factory()->create(['users_id' => $user->id]);
+        $token = $user->createToken('auth_token')->plainTextToken;
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $payload = [
+            'name' => fake()->name(),
+            'place_of_birth' => fake()->city(),
+            'date_of_birth' => fake()->dateTimeThisCentury()->format('Y-m-d'),
+            'gender' => fake()->numberBetween($min = 1, $max = 2),
+            'blood_type' => fake()->numberBetween($min = 1, $max = 4),
+            'identity_type' => fake()->numberBetween($min = 1, $max = 2),
+            'identity_number' => fake()->numerify('3273############'),
+        ];
+        $this->json('post', 'zeus/profile/'.$profile->id, $payload, $headers)->assertStatus(200);
+        $profile = Profile::where('id', $profile->id)->first();
+        foreach($payload as $key => $value) {
+            $this->assertEquals($profile->$key, $payload[$key]);
+        }
+
+        $user->delete();
+    }
+    public function test_delete_user_profile()
+    {
+        $user = User::factory()->create();
+        $profile = Profile::factory()->create(['users_id' => $user->id]);
+        $token = $user->createToken('auth_token')->plainTextToken;
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $array = $this->json('delete', 'zeus/profile/'.$profile->id, [], $headers)->assertStatus(204);
+        $array = $this->json('post', 'zeus/profile/'.$profile->id, [], $headers)->assertStatus(404);
 
         $user->delete();
     }
