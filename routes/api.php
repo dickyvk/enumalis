@@ -45,5 +45,52 @@ Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function 
 	Route::post('zeus/notification/blast', [ZeusController::class, 'blastNotification']);
 });
 
-
 use App\Http\Controllers\PhemeController;
+Route::group(['middleware' => ['auth:sanctum']], function () {
+	/**CATEGORY**/
+    Route::get('pheme/category/', [PhemeController::class, 'getCategory']);
+    Route::get('pheme/category/{category}', [PhemeController::class, 'showCategory']);
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::post('pheme/category/', [PhemeController::class, 'setCategory']);
+        Route::patch('pheme/category/{category}', [PhemeController::class, 'setCategory']);
+        Route::delete('pheme/category/{category}', [PhemeController::class, 'deleteCategory']);
+    });
+    // Threads by category
+    Route::get('pheme/category/{category}/thread', [PhemeController::class, 'indexByCategory']);
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+    	Route::post('pheme/category/{category}/thread', [PhemeController::class, 'setThread']);
+    });
+    /**END OF CATEGORY**/
+
+    /**THREAD**/
+    Route::get('pheme/thread/recent', [PhemeController::class, 'recentThread']);
+    Route::get('pheme/thread/unread', [PhemeController::class, 'unreadThread']);
+    Route::patch('pheme/thread/unread/mark-as-read', [PhemeController::class, 'markAsRead'])->name('unread.mark-as-read')->middleware($authMiddleware);
+    Route::get('pheme/thread/{thread}', [PhemeController::class, 'showThread']);
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::delete('pheme/thread/{thread}', [PhemeController::class, 'deleteThread'])->name('delete');
+        Route::post('pheme/thread/{thread}/restore', [PhemeController::class, 'restoreThread'])->name('restore');
+    });
+    // Posts by thread
+    Route::get('pheme/thread/{thread}/posts', [PhemeController::class, 'indexByThread'])->name('posts');
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+    	Route::post('pheme/thread/{thread}/posts', [PhemeController::class, 'setPost']);
+    });
+    /**END OF THREAD**/
+
+	/**POST**/
+	Route::prefix('post')->name('post.')->group(function () use ($authMiddleware) {
+	    if (config('forum.api.enable_search')) {
+	        Route::post('search', [PhemeController::class, 'search'])->name('search');
+	    }
+	});
+    Route::get('pheme/post/recent', [PhemeController::class, 'recentPost']);
+    Route::get('pheme/post/unread', [PhemeController::class, 'unreadPost']);
+    Route::get('pheme/post/{post}', [PhemeController::class, 'showPost']);
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::patch('pheme/post/{post}', [PhemeController::class, 'setPost']);
+        Route::delete('pheme/post/{post}', [PhemeController::class, 'deletePost']);
+        Route::post('pheme/post/{post}/restore', [PhemeController::class, 'restorePost']);
+    });
+	/**END OF POST**/
+});

@@ -13,9 +13,9 @@ class ThreadFactory extends Factory
     {
         return [
             'title' => fake()->words(3, true),
-            'category_id' => CategoryFactory::new(),
-            'locked' => 0,
+            'categories_id' => CategoryFactory::new(),
             'pinned' => 0,
+            'locked' => 0,
             'reply_count' => 0,
             'deleted_at' => null,
         ];

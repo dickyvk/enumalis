@@ -12,9 +12,8 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'thread_id' => ThreadFactory::new(),
-            'author_id' => 0,
-            'post_id' => null,
+            'profiles_id' => 0,
+            'threads_id' => ThreadFactory::new(),
             'content' => fake()->sentence(),
         ];
     }
