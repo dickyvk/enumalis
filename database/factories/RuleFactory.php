@@ -15,6 +15,7 @@ class RuleFactory extends Factory
             'users_id' => fake()->unique()->numberBetween(1, User::count()),
             'terms' => fake()->numberBetween($min = 0, $max = 1),
             'policy' => fake()->numberBetween($min = 0, $max = 1),
+            'pagination' => fake()->arrayElement([10,20,50,100]),
         ];
     }
 }

@@ -1,10 +1,12 @@
 <?php
 
-namespace TeamTeaTime\Forum\Models;
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,25 +16,51 @@ use Illuminate\Support\Facades\Auth;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
 use TeamTeaTime\Forum\Support\Frontend\Forum;
 
-class Thread extends BaseModel
+class Thread extends Model
 {
     use SoftDeletes;
-    use HasAuthor;
+    use HasFactory;
 
+    protected $connection = 'pheme';
     protected $table = 'forum_threads';
+
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'category_id',
-        'author_id',
+        'profiles_id',
+        'categories_id',
         'title',
-        'locked',
         'pinned',
-        'reply_count',
+        'locked',
         'first_post_id',
         'last_post_id',
+        'reply_count',
         'updated_at',
     ];
-    protected $appends = ['route'];
+
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class, 'threads_id');
+    }
+
+    public function firstPost(): HasOne
+    {
+        return $this->hasOne(Post::class, 'id', 'first_post_id');
+    }
+
+    public function lastPost(): HasOne
+    {
+        return $this->hasOne(Post::class, 'id', 'last_post_id');
+    }
+
+    public function getFirstPostId()
+    {
+        return $this->posts()->orderBy('created_at, id', 'asc')->first();
+    }
+
+    public function getLastPostId()
+    {
+        return $this->posts()->orderBy('created_at, id', 'desc')->first();
+    }
 
     public const READERS_TABLE = 'forum_threads_read';
 
@@ -60,21 +88,6 @@ class Thread extends BaseModel
             'thread_id',
             'user_id'
         )->withTimestamps();
-    }
-
-    public function posts(): HasMany
-    {
-        return $this->hasMany(Post::class);
-    }
-
-    public function firstPost(): HasOne
-    {
-        return $this->hasOne(Post::class, 'id', 'first_post_id');
-    }
-
-    public function lastPost(): HasOne
-    {
-        return $this->hasOne(Post::class, 'id', 'last_post_id');
     }
 
     public function scopeRecent(Builder $query): Builder

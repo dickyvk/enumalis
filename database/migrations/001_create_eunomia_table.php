@@ -53,6 +53,7 @@ return new class extends Migration
             $table->foreignId('users_id')->constrained()->onDelete('cascade');
             $table->boolean('terms')->default(0);
             $table->boolean('policy')->default(0);
+            $table->tinyInteger('pagination')->default(10);
             $table->timestamps();
         });
     }

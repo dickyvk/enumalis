@@ -3,18 +3,18 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Post;
+use App\Models\Profile;
+use App\Models\Thread;
 
 class PostFactory extends Factory
 {
-    protected $model = Post::class;
-
     public function definition(): array
     {
         return [
-            'profiles_id' => 0,
-            'threads_id' => ThreadFactory::new(),
+            'profiles_id' => fake()->numberBetween(1, Profile::count()),
+            'threads_id' => fake()->numberBetween(1, Thread::count()),
             'content' => fake()->sentence(),
+            'deleted_at' => null,
         ];
     }
 }

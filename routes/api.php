@@ -65,21 +65,23 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     /**THREAD**/
     Route::get('pheme/thread/recent', [PhemeController::class, 'recentThread']);
     Route::get('pheme/thread/unread', [PhemeController::class, 'unreadThread']);
-    Route::patch('pheme/thread/unread/mark-as-read', [PhemeController::class, 'markAsRead'])->name('unread.mark-as-read')->middleware($authMiddleware);
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+    	Route::patch('pheme/thread/unread/mark-as-read', [PhemeController::class, 'markAsRead']);
+    });
     Route::get('pheme/thread/{thread}', [PhemeController::class, 'showThread']);
     Route::group(['middleware' => ['auth:sanctum']], function () {
-        Route::delete('pheme/thread/{thread}', [PhemeController::class, 'deleteThread'])->name('delete');
-        Route::post('pheme/thread/{thread}/restore', [PhemeController::class, 'restoreThread'])->name('restore');
+        Route::delete('pheme/thread/{thread}', [PhemeController::class, 'deleteThread']);
+        Route::post('pheme/thread/{thread}/restore', [PhemeController::class, 'restoreThread']);
     });
     // Posts by thread
-    Route::get('pheme/thread/{thread}/posts', [PhemeController::class, 'indexByThread'])->name('posts');
+    Route::get('pheme/thread/{thread}/post', [PhemeController::class, 'indexByThread'])->name('posts');
     Route::group(['middleware' => ['auth:sanctum']], function () {
-    	Route::post('pheme/thread/{thread}/posts', [PhemeController::class, 'setPost']);
+    	Route::post('pheme/thread/{thread}/post', [PhemeController::class, 'setPost']);
     });
     /**END OF THREAD**/
 
 	/**POST**/
-	Route::prefix('post')->name('post.')->group(function () use ($authMiddleware) {
+    Route::group(['middleware' => ['auth:sanctum']], function () {
 	    if (config('forum.api.enable_search')) {
 	        Route::post('search', [PhemeController::class, 'search'])->name('search');
 	    }

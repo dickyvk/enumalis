@@ -18,5 +18,6 @@ class Rule extends Model
     	'users_id',
         'terms',
         'policy',
+        'pagination',
     ];
 }

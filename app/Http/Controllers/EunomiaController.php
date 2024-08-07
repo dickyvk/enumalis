@@ -110,6 +110,7 @@ class EunomiaController extends Controller
         $validator = Validator::make($request->all(),[
             'terms' => 'nullable|boolean',
             'policy' => 'nullable|boolean',
+            'pagination' => 'nullable|integer',
         ]);
 
         if($validator->fails()){
@@ -119,7 +120,7 @@ class EunomiaController extends Controller
         $token = PersonalAccessToken::findToken($request->bearerToken());
         $user = $token->tokenable;
         $rule = Rule::where('users_id', $user->id)->first();
-        $rule->update($request->only('terms', 'policy'));
+        $rule->update($request->only('terms', 'policy', 'pagination'));
 
         return response()->json($rule, 200);
     }

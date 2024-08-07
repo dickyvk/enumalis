@@ -3,19 +3,19 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Thread;
+use App\Models\Profile;
+use App\Models\Category;
 
 class ThreadFactory extends Factory
 {
-    protected $model = Thread::class;
-
     public function definition(): array
     {
         return [
+            'profiles_id' => fake()->numberBetween(1, Profile::count()),
+            'categories_id' => fake()->numberBetween(1, Category::count()),
             'title' => fake()->words(3, true),
-            'categories_id' => CategoryFactory::new(),
             'pinned' => 0,
-            'locked' => 0,
+            'locked' => fake()->numberBetween($min = 0, $max = 1),
             'reply_count' => 0,
             'deleted_at' => null,
         ];

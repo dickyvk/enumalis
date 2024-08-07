@@ -14,10 +14,10 @@ class CategoryFactory extends Factory
         return [
             'title' => fake()->words(3, true),
             'description' => fake()->sentence(),
-            'accepts_threads' => 1,
+            'accepts_threads' => fake()->numberBetween($min = 0, $max = 1),
             'thread_count' => 0,
             'post_count' => 0,
-            'is_private' => 0,
+            'is_private' => fake()->numberBetween($min = 0, $max = 1),
             'color_light_mode' => '#007BFF',
             'color_dark_mode' => '#007BFF',
         ];

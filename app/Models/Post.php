@@ -1,6 +1,9 @@
 <?php
 
-namespace TeamTeaTime\Forum\Models;
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,21 +13,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use TeamTeaTime\Forum\Models\Traits\HasAuthor;
 use TeamTeaTime\Forum\Support\Frontend\Forum;
 
-class Post extends BaseModel
+class Post extends Model
 {
     use SoftDeletes;
-    use HasAuthor;
+    use HasFactory;
 
+    protected $connection = 'pheme';
     protected $table = 'forum_posts';
+
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'thread_id',
-        'author_id',
-        'post_id',
-        'sequence',
+        'profiles_id',
+        'threads_id',
         'content',
+        'sequence',
+        'updated_at',
     ];
-    protected $appends = ['route'];
 
     public function __construct(array $attributes = [])
     {
