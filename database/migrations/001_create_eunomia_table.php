@@ -50,7 +50,7 @@ return new class extends Migration
             $table->timestamps();
         });
         Schema::create('rules', function (Blueprint $table) {
-            $table->foreignId('users_id')->constrained()->onDelete('cascade');
+            $table->foreignId('users_id')->unique()->constrained()->onDelete('cascade');
             $table->boolean('terms')->default(0);
             $table->boolean('policy')->default(0);
             $table->tinyInteger('pagination')->default(10);

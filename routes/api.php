@@ -50,9 +50,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	/**CATEGORY**/
     Route::get('pheme/category/', [PhemeController::class, 'getCategory']);
     Route::get('pheme/category/{category}', [PhemeController::class, 'showCategory']);
-    Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {
         Route::post('pheme/category/', [PhemeController::class, 'setCategory']);
-        Route::patch('pheme/category/{category}', [PhemeController::class, 'setCategory']);
+        Route::post('pheme/category/{category}', [PhemeController::class, 'setCategory']);
         Route::delete('pheme/category/{category}', [PhemeController::class, 'deleteCategory']);
     });
     // Threads by category

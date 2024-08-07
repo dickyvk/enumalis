@@ -29,7 +29,10 @@ class PhemeController extends Controller
 
         return $this->resourceClass::collection($categories);*/
 
-        $category = Category::orderBy('title', 'asc')->paginate(10, ['*'], 'page', $request->page);
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+        $user = $token->tokenable;
+
+        $category = Category::orderBy('title', 'asc')->paginate($user->getPaginate(), ['*'], 'page', $request->page);
 
         return response()
             ->json($category);

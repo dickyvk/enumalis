@@ -50,4 +50,9 @@ class User extends Authenticatable
             get: fn ($value) =>  ['user', 'master', 'admin'][$value],
         );
     }
+
+    public function getPaginate()
+    {
+        return Rule::where('users_id', $this->id)->first()->pagination;
+    }
 }
