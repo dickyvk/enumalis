@@ -58,7 +58,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Threads by category
     Route::get('pheme/category/{category}/thread', [PhemeController::class, 'indexByCategory']);
     Route::group(['middleware' => ['auth:sanctum']], function () {
-    	Route::post('pheme/category/{category}/thread', [PhemeController::class, 'setThread']);
+    	Route::post('pheme/category/{category}/thread/', [PhemeController::class, 'setThread']);
+    	Route::post('pheme/category/{category}/thread/{thread}', [PhemeController::class, 'setThread']);
     });
     /**END OF CATEGORY**/
 

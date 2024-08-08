@@ -38,9 +38,9 @@ class ZeusController extends Controller
         else
         {
             $validator = Validator::make($request->all(),[
-                'name' => 'required|string|max:255',
+                'name' => 'nullable|string|max:255',
                 'place_of_birth' => 'nullable|string|max:255',
-                'date_of_birth' => 'required|date_format:Y-m-d',
+                'date_of_birth' => 'nullable|date_format:Y-m-d',
                 'gender' => 'nullable|integer|between:1,2',
                 'blood_type' => 'nullable|integer|between:1,4',
                 'identity_type' => 'nullable|integer|between:1,2',

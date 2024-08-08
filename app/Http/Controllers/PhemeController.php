@@ -12,12 +12,14 @@ use App\Models\Post;
 
 class PhemeController extends Controller
 {
-	/*protected $resourceClass = null;
+	protected $paginate = 10;
 
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->resourceClass = config('forum.api.resources.category', CategoryResource::class);
-    }*/
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+        $user = $token->tokenable;
+        $this->paginate = $user->getPaginate();
+    }
 
     public function getCategory(Request $request)
     {
@@ -29,10 +31,7 @@ class PhemeController extends Controller
 
         return $this->resourceClass::collection($categories);*/
 
-        $token = PersonalAccessToken::findToken($request->bearerToken());
-        $user = $token->tokenable;
-
-        $category = Category::orderBy('title', 'asc')->paginate($user->getPaginate(), ['*'], 'page', $request->page);
+        $category = Category::orderBy('title', 'asc')->paginate($this->paginate, ['*'], 'page', $request->page);
 
         return response()
             ->json($category);
@@ -70,9 +69,9 @@ class PhemeController extends Controller
         else
         {
             $validator = Validator::make($request->all(),[
-                'title' => 'required|string|max:255',
+                'title' => 'nullable|string|max:255',
                 'description' => 'nullable|string|max:255',
-                'accepts_threads' => 'required|integer|between:0,1',
+                'accepts_threads' => 'nullable|integer|between:0,1',
                 'is_private' => 'nullable|integer|between:0,1',
             ]);
 
@@ -92,7 +91,7 @@ class PhemeController extends Controller
         return response()->json(null, 204);
     }
 
-    public function indexByCategory(Request $request, Category $category): AnonymousResourceCollection|Response
+    public function indexByCategory(Request $request, Category $category)
     {
         /*$category = $request->route('category');
         if (!$category->isAccessibleTo($request->user())) {
@@ -119,7 +118,7 @@ class PhemeController extends Controller
             $thread = $thread->where('updated_at', '<', Carbon::parse($updatedBefore)->toDateString());
         }
 
-        $thread = $thread->paginate(10, ['*'], 'page', $request->page);
+        $thread = $thread->paginate($this->paginate, ['*'], 'page', $request->page);
 
         /*if ($category->is_private) {
             $threads->setCollection($threads->getCollection()->filter(function ($thread) use ($request) {
@@ -131,13 +130,12 @@ class PhemeController extends Controller
 
         return response()->json($thread, 200);
     }
-    public function setThread(Request $request, Thread $thread = NULL)
+    public function setThread(Request $request, Category $category, Thread $thread = NULL)
     {
         if(!$thread)
         {
             $validator = Validator::make($request->all(),[
                 'profiles_id' => 'required|integer',
-                'categories_id' => 'required|integer',
                 'title' => 'required|string|max:255',
                 'pinned' => 'nullable|integer|between:0,1',
                 'locked' => 'nullable|integer|between:0,1',
@@ -147,16 +145,16 @@ class PhemeController extends Controller
                 return response()->json(['message' => $validator->errors()->first()], 400);
             }
 
-            $thread = Thread::create(array_merge($request->all()));
+            $thread = Thread::create(array_merge('categories_id' => $category->id, $request->all()));
 
             return response()->json($thread, 201);
         }
         else
         {
             $validator = Validator::make($request->all(),[
-                'profiles_id' => 'required|integer',
-                'categories_id' => 'required|integer',
-                'title' => 'required|string|max:255',
+                'profiles_id' => 'nullable|integer',
+                'categories_id' => 'nullable|integer',
+                'title' => 'nullable|string|max:255',
                 'pinned' => 'nullable|integer|between:0,1',
                 'locked' => 'nullable|integer|between:0,1',
             ]);
