@@ -33,8 +33,8 @@ class PhemeSeeder extends Seeder
                 }
                 if($sequence > 0)
                 {
-                    $thread->first_post_id = $thread->posts()->orderBy('created_at')->orderBy('id')->first()->id;
-                    $thread->last_post_id = $thread->posts()->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first()->id;
+                    $thread->first_post_id = $thread->getFirstPostId();
+                    $thread->last_post_id = $thread->getLastPostId();
                     $thread->reply_count = $sequence;
                     $thread->save();
                 }
@@ -43,9 +43,9 @@ class PhemeSeeder extends Seeder
             }
             if($post_count > 0)
             {
-                $category->newest_thread_id = $category->threads()->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first()->id;
-                $category->latest_active_thread_id = $category->threads()->orderBy('updated_at', 'desc')->orderBy('id', 'desc')->first()->id;
-                $category->thread_count = $category->threads()->count();
+                $category->newest_thread_id = $category->getNewestThreadId();
+                $category->latest_active_thread_id = $category->getLatestActiveThreadId();
+                $category->thread_count = $category->getThreadCount();
                 $category->post_count = $post_count;
                 $category->save();
             }

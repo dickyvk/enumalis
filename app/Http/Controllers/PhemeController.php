@@ -145,7 +145,7 @@ class PhemeController extends Controller
                 return response()->json(['message' => $validator->errors()->first()], 400);
             }
 
-            $thread = Thread::create(array_merge('categories_id' => $category->id, $request->all()));
+            $thread = Thread::create(array_merge(array('categories_id' => $category->id), $request->all()));
 
             return response()->json($thread, 201);
         }

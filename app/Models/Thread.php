@@ -52,15 +52,17 @@ class Thread extends Model
         return $this->hasOne(Post::class, 'id', 'last_post_id');
     }
 
-    public function getFirstPostId()
+    public function getFirstPostId(): int
     {
-        return $this->posts()->orderBy('created_at, id', 'asc')->first();
+        return $this->posts()->orderBy('created_at')->orderBy('id')->first()->id;
     }
 
-    public function getLastPostId()
+    public function getLastPostId(): int
     {
-        return $this->posts()->orderBy('created_at, id', 'desc')->first();
+        return $this->posts()->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first()->id;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////
 
     public const READERS_TABLE = 'forum_threads_read';
 

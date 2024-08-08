@@ -48,6 +48,27 @@ class Category extends Model
         return $this->hasOne(Thread::class, 'id', 'latest_active_thread_id');
     }
 
+    public function getNewestThreadId(): ?int
+    {
+        $thread = $this->threads()->orderBy('created_at', 'desc')->orderBy('id', 'desc')->first();
+
+        return $thread ? $thread->id : null;
+    }
+
+    public function getLatestActiveThreadId(): ?int
+    {
+        $thread = $this->threads()->orderBy('updated_at', 'desc')->orderBy('id', 'desc')->first();
+
+        return $thread ? $thread->id : null;
+    }
+
+    public function getThreadCount(): int
+    {
+        return $category->threads()->count();
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+
     public function scopeTopLevel(Builder $query): Builder
     {
         return $query->where('parent_id', 0);
@@ -79,20 +100,6 @@ class Category extends Model
     public function isAccessibleTo(?User $user): bool
     {
         return CategoryAccess::isAccessibleTo($user, $this->id);
-    }
-
-    public function getNewestThreadId(): ?int
-    {
-        $thread = $this->threads()->orderBy('created_at', 'desc')->first();
-
-        return $thread ? $thread->id : null;
-    }
-
-    public function getLatestActiveThreadId(): ?int
-    {
-        $thread = $this->threads()->orderBy('updated_at', 'desc')->first();
-
-        return $thread ? $thread->id : null;
     }
 
     protected function route(): Attribute
