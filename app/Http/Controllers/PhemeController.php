@@ -90,7 +90,6 @@ class PhemeController extends Controller
 
         return response()->json(null, 204);
     }
-
     public function indexByCategory(Request $request, Category $category)
     {
         /*$category = $request->route('category');
@@ -168,9 +167,10 @@ class PhemeController extends Controller
             return response()->json($thread, 200);
         }
     }
+    
     public function recentThread(Request $request, bool $unreadOnly = false)
     {
-        $thread = Thread::recent()->get();
+        $thread = Thread::latest()->get();
         /*    ->filter(function ($thread) use ($request, $unreadOnly) {
                 return $thread->category->isAccessibleTo($request->user())
                     && (!$unreadOnly || $thread->userReadStatus !== null)
@@ -183,7 +183,7 @@ class PhemeController extends Controller
 
         return $this->resourceClass::collection($threads);*/
 
-        return response()->json($category, 200);
+        return response()->json($thread, 200);
     }
     public function unreadThreat(Request $request)
     {

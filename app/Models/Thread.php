@@ -37,6 +37,11 @@ class Thread extends Model
         'updated_at',
     ];
 
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class, 'threads_id');
@@ -75,11 +80,6 @@ class Thread extends Model
     {
         parent::__construct($attributes);
         $this->perPage = config('forum.general.pagination.threads');
-    }
-
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
     }
 
     public function readers(): BelongsToMany
