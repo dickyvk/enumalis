@@ -16,9 +16,10 @@ class PhemeController extends Controller
 
     public function __construct(Request $request)
     {
-        $token = PersonalAccessToken::findToken($request->bearerToken());
-        $user = $token->tokenable;
-        $this->paginate = $user->getPaginate();
+        if($user = auth()->user())
+        {
+            $this->paginate = $user->getPaginate();
+        }
     }
 
     public function getCategory(Request $request)
@@ -62,9 +63,9 @@ class PhemeController extends Controller
                 return response()->json(['message' => $validator->errors()->first()], 400);
             }
 
-            $category = Category::create(array_merge($request->all()));
+            Category::create(array_merge($request->all()));
 
-            return response()->json($category, 201);
+            return response()->json(['message' => 'Category created successfully'], 201);
         }
         else
         {
@@ -81,7 +82,7 @@ class PhemeController extends Controller
             
             $category->update($request->all());
 
-            return response()->json($category, 200);
+            return response()->json(['message' => 'Category updated successfully'], 200);
         }
     }
     public function deleteCategory(Category $category)
@@ -170,7 +171,8 @@ class PhemeController extends Controller
     
     public function recentThread(Request $request, bool $unreadOnly = false)
     {
-        $thread = Thread::latest()->get();
+        $thread = Thread::latest();
+        $thread = $thread->paginate($this->paginate, ['*'], 'page', $request->page);
         /*    ->filter(function ($thread) use ($request, $unreadOnly) {
                 return $thread->category->isAccessibleTo($request->user())
                     && (!$unreadOnly || $thread->userReadStatus !== null)
@@ -185,7 +187,7 @@ class PhemeController extends Controller
 
         return response()->json($thread, 200);
     }
-    public function unreadThreat(Request $request)
+    public function unreadThread(Request $request)
     {
         return $this->recentThread($request, true);
     }

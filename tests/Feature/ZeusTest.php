@@ -159,6 +159,7 @@ class ZeusTest extends TestCase
             ->assertJsonIsArray();
 
         $user->delete();
+        $notification->delete();
     }
     public function test_show_notification()
     {
@@ -181,6 +182,7 @@ class ZeusTest extends TestCase
             ]);
 
         $user->delete();
+        $notification->delete();
     }
     public function test_update_notification()
     {
@@ -202,6 +204,7 @@ class ZeusTest extends TestCase
         }
 
         $user->delete();
+        $notification->delete();
     }
     public function test_delete_notification()
     {
