@@ -139,8 +139,16 @@ class ZeusController extends Controller
         return $notification;
     }
 
-    public function updateNotification(Request $request, Notification $notification)
+    public function readNotification(Request $request, Notification $notification)
     {
+        $validator = Validator::make($request->all(),[
+            'opened' => 'required|boolean',
+        ]);
+
+        if($validator->fails()){
+            return response()->json(['message' => $validator->errors()->first()], 400);
+        }
+        
         $notification->update($request->all());
 
         return response()->json($notification, 200);

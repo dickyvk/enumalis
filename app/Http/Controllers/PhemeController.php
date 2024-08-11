@@ -6,33 +6,45 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
 use Validator;
+use App\Models\Profile;
 use App\Models\Category;
 use App\Models\Thread;
 use App\Models\Post;
 
 class PhemeController extends Controller
 {
+    protected $user_type;
 	protected $paginate = 10;
 
     public function __construct(Request $request)
     {
         if($user = auth()->user())
         {
+            $this->user_type = $user->type;
             $this->paginate = $user->getPaginate();
         }
     }
 
-    public function getCategory(Request $request)
+    public function getCategory(Request $request, Profile $profile)
     {
-    	/*if ($request->has('parent_id')) {
-            $categories = CategoryAccess::getFilteredDescendantsFor($request->user(), $request->query('parent_id'));
-        } else {
-            $categories = CategoryAccess::getFilteredTreeFor($request->user());
+        if($user = auth()->user())
+        {
+            $this->user_type = $user->type;
+            $this->paginate = $user->getPaginate();
         }
-
-        return $this->resourceClass::collection($categories);*/
-
-        $category = Category::orderBy('title', 'asc')->paginate($this->paginate, ['*'], 'page', $request->page);
+        switch($this->user_type)
+        {
+            case 'master':
+                $category = Category::orderBy('title', 'asc')->paginate($this->paginate, ['*'], 'page', $request->page);
+                break;
+            case 'admin':
+            case 'user':
+                $category = Category::whereIn('id', $profile->getAccessCategoriesId())->orderBy('title', 'asc')->paginate($this->paginate, ['*'], 'page', $request->page);
+                break;
+            default:
+                $category = Category::whereIn('id', [1,2,3])->orderBy('title', 'asc')->paginate($this->paginate, ['*'], 'page', $request->page);
+                break;
+        }
 
         return response()
             ->json($category);
@@ -84,6 +96,10 @@ class PhemeController extends Controller
 
             return response()->json(['message' => 'Category updated successfully'], 200);
         }
+    }
+    public function grantAccess(Request $request)
+    {
+        return Category::first()->isAccessibleTo(auth()->user());
     }
     public function deleteCategory(Category $category)
     {

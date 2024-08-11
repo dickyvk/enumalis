@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User;
-use TeamTeaTime\Forum\Support\Access\CategoryAccess;
-use TeamTeaTime\Forum\Support\Frontend\Forum;
 
 class Category extends Model
 {
@@ -33,6 +32,26 @@ class Category extends Model
         'color_dark_mode',
     ];
     
+    public function isAccessibleTo(User $user): bool
+    {
+        if($user->type != 'master')
+        {
+            return true;
+        }
+        else
+        {
+            $access = DB::connection('pheme')->table('forum_categories_access')->where('categories_id', $this->id)->whereIn('profiles_id', $user->getProfilesId())->first();
+            if($access)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
     public function threads(): HasMany
     {
         return $this->hasMany(Thread::class, 'categories_id');
@@ -64,7 +83,7 @@ class Category extends Model
 
     public function getThreadCount(): int
     {
-        return $category->threads()->count();
+        return $this->threads()->count();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -95,11 +114,6 @@ class Category extends Model
     public function isEmpty(): bool
     {
         return $this->descendants->count() == 0 && $this->threads()->withTrashed()->count() == 0;
-    }
-
-    public function isAccessibleTo(?User $user): bool
-    {
-        return CategoryAccess::isAccessibleTo($user, $this->id);
     }
 
     protected function route(): Attribute

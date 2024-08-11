@@ -37,7 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::delete('zeus/profile/{profile}', [ZeusController::class, 'deleteProfile']);
 	Route::get('zeus/notification', [ZeusController::class, 'getNotification']);
 	Route::get('zeus/notification/{notification}', [ZeusController::class, 'showNotification']);
-	Route::put('zeus/notification/{notification}', [ZeusController::class, 'updateNotification']);
+	Route::put('zeus/notification/{notification}', [ZeusController::class, 'readNotification']);
 	Route::delete('zeus/notification/{notification}', [ZeusController::class, 'deleteNotification']);
 });
 Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {
@@ -48,12 +48,13 @@ Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function 
 use App\Http\Controllers\PhemeController;
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	/**CATEGORY**/
-    Route::get('pheme/category/', [PhemeController::class, 'getCategory']);
-    Route::get('pheme/category/{category}', [PhemeController::class, 'showCategory']);
+    Route::get('pheme/{profile}/category/', [PhemeController::class, 'getCategory']);
+    Route::get('pheme/{profile}/category/{category}', [PhemeController::class, 'showCategory']);
     Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {
-        Route::post('pheme/category/', [PhemeController::class, 'setCategory']);
-        Route::post('pheme/category/{category}', [PhemeController::class, 'setCategory']);
-        Route::delete('pheme/category/{category}', [PhemeController::class, 'deleteCategory']);
+        Route::post('pheme/{profile}/category/', [PhemeController::class, 'setCategory']);
+        Route::post('pheme/{profile}/category/{category}', [PhemeController::class, 'setCategory']);
+        Route::delete('pheme/{profile}/category/{category}', [PhemeController::class, 'deleteCategory']);
+        Route::post('pheme/profile/{profile}', [PhemeController::class, 'grantAccess']);
     });
     //Threads by category
     Route::get('pheme/category/{category}/thread', [PhemeController::class, 'indexByCategory']);

@@ -51,6 +51,11 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+        Schema::create('forum_categories_access', function (Blueprint $table) {
+            $table->foreignId('categories_id')->constrained(table: 'pheme.forum_categories')->onDelete('cascade');
+            $table->foreignId('profiles_id')->constrained(table: 'zeus.profiles')->onDelete('cascade');
+            $table->timestamps();
+        });
         Schema::create('forum_threads_read', function (Blueprint $table) {
             $table->foreignId('threads_id')->constrained(table: 'pheme.forum_threads')->onDelete('cascade');
             $table->foreignId('profiles_id')->constrained(table: 'zeus.profiles')->onDelete('cascade');
@@ -64,6 +69,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('forum_threads_read');
+        Schema::dropIfExists('forum_categories_access');
         Schema::dropIfExists('forum_posts');
         Schema::dropIfExists('forum_threads');
         Schema::dropIfExists('forum_categories');

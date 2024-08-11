@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -49,6 +53,16 @@ class User extends Authenticatable
         return new Attribute(
             get: fn ($value) =>  ['user', 'master', 'admin'][$value],
         );
+    }
+    
+    public function profiles(): HasMany
+    {
+        return $this->hasMany(Profile::class, 'users_id');
+    }
+
+    public function getProfilesId()
+    {
+        return $this->profiles()->pluck('id')->toArray();
     }
 
     public function getPaginate()

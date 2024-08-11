@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Profile extends Model
 {
@@ -39,5 +40,10 @@ class Profile extends Model
         return new Attribute(
             get: fn ($value) =>  ['', 'Passport', 'KTP'][$value],
         );
+    }
+
+    public function getAccessCategoriesId()
+    {
+        return DB::connection('pheme')->table('forum_categories_access')->where('profiles_id', $this->id)->pluck('categories_id')->toArray();
     }
 }

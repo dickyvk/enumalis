@@ -184,7 +184,7 @@ class ZeusTest extends TestCase
         $user->delete();
         $notification->delete();
     }
-    public function test_update_notification()
+    public function test_read_notification()
     {
         $user = User::factory()->create();
         $profile = Profile::factory()->create(['users_id' => $user->id]);
@@ -193,8 +193,6 @@ class ZeusTest extends TestCase
         $headers = ['Authorization' => "Bearer $token"];
 
         $payload = [
-            'title' => fake()->words(3, true),
-            'body' => fake()->sentence(),
             'opened' => fake()->numberBetween($min = 0, $max = 1),
         ];
         $this->json('put', 'zeus/notification/'.$notification->id, $payload, $headers)->assertStatus(200);
