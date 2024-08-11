@@ -19,6 +19,6 @@ class UserAccess
             return $next($request);
         }
         
-        return response()->json(['You do not have permission to access this.'], 401);
+        return response()->json(['message' => 'You do not have permission to access this'], 401);
     }
 }

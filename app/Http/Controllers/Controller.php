@@ -10,6 +10,15 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    public function unauthorizedResponse()
+    {
+        return response()->json(['message' => 'Unauthorized'], 401);
+    }
+    public function notFoundResponse()
+    {
+        return response()->json(['message' => 'Not Found'], 401);
+    }
+
     public function randomAlpha($length = 6)
     {
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';

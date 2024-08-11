@@ -31,17 +31,16 @@ class Category extends Model
         'color_light_mode',
         'color_dark_mode',
     ];
-    
-    public function isAccessibleTo(User $user): bool
+
+    public function isAccessibleTo(Profile $profile): bool
     {
-        if($user->type != 'master')
+        if(auth()->user() == 'master')
         {
             return true;
         }
         else
         {
-            $access = DB::connection('pheme')->table('forum_categories_access')->where('categories_id', $this->id)->whereIn('profiles_id', $user->getProfilesId())->first();
-            if($access)
+            if(in_array($this->id, $profile->getAccessCategoriesId()))
             {
                 return true;
             }

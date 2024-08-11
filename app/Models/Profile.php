@@ -42,6 +42,11 @@ class Profile extends Model
         );
     }
 
+    public function ownedBy(User $user): bool
+    {
+        return $this->users_id == $user->id;
+    }
+
     public function getAccessCategoriesId()
     {
         return DB::connection('pheme')->table('forum_categories_access')->where('profiles_id', $this->id)->pluck('categories_id')->toArray();

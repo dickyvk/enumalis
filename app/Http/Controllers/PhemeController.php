@@ -27,6 +27,10 @@ class PhemeController extends Controller
 
     public function getCategory(Request $request, Profile $profile)
     {
+        if (!$profile->ownedBy(auth()->user()))
+        {
+            return $this->unauthorizedResponse();
+        }
         if($user = auth()->user())
         {
             $this->user_type = $user->type;
@@ -49,18 +53,17 @@ class PhemeController extends Controller
         return response()
             ->json($category);
     }
-    public function showCategory(Category $category)
+    public function showCategory(Profile $profile, Category $category)
     {
-    	/*$category = $request->route('category');
-        if (!$category->isAccessibleTo($request->user())) {
-            return $this->notFoundResponse();
+        if (!$profile->ownedBy(auth()->user())
+            || !$category->isAccessibleTo($profile))
+        {
+            return $this->unauthorizedResponse();
         }
-
-        return new $this->resourceClass($category);*/
 
         return $category;
     }
-    public function setCategory(Request $request, Category $category = NULL)
+    public function setCategory(Request $request, Profile $profile, Category $category = NULL)
     {
         if(!$category)
         {
@@ -99,7 +102,7 @@ class PhemeController extends Controller
     }
     public function grantAccess(Request $request)
     {
-        return Category::first()->isAccessibleTo(auth()->user());
+        //
     }
     public function deleteCategory(Category $category)
     {
