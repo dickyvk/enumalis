@@ -117,7 +117,6 @@ class EunomiaController extends Controller
     {
         // Validate input for the authenticated user
         $validator = Validator::make($request->all(), [
-            'name' => 'nullable|sometimes|string|max:255',
             'email' => 'nullable|sometimes|email|max:255|unique:eunomia.users,email,' . Auth::id(),
             'phone' => 'nullable|sometimes|string|max:255|unique:eunomia.users,phone,' . Auth::id(),
         ]);
@@ -135,7 +134,7 @@ class EunomiaController extends Controller
             }
 
             // Update the user's own information (only email and phone allowed)
-            $user->update($request->only('name', 'email', 'phone'));
+            $user->update($request->only('email', 'phone'));
 
             return response()->json(['message' => 'User information updated successfully', 'data' => $user], 200);
 
@@ -149,7 +148,6 @@ class EunomiaController extends Controller
         // Validate input for the specified user
         $validator = Validator::make($request->all(), [
             'uid' => 'nullable|sometimes|string|max:255|unique:eunomia.users,uid,' . $userId, // Allow masters to change uid
-            'name' => 'nullable|sometimes|string|max:255',
             'email' => 'nullable|sometimes|email|max:255|unique:eunomia.users,email,' . $userId,
             'phone' => 'nullable|sometimes|string|max:255|unique:eunomia.users,phone,' . $userId,
             'type' => 'nullable|sometimes|integer', // Allow masters to change type
@@ -235,7 +233,7 @@ class EunomiaController extends Controller
             $rule = Rule::where('users_id', $user->id)->first();
             $rule->update($request->only('terms', 'policy', 'pagination'));
 
-            return response()->json(['message' => 'Rules updated successfully', 'data' => $user], 200);
+            return response()->json(['message' => 'Rules updated successfully', 'data' => $rule], 200);
 
         } catch (Exception $e) {
             return response()->json(['message' => 'Failed to update rules.'], 500);
