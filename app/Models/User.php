@@ -65,6 +65,16 @@ class User extends Authenticatable
         return $this->profiles()->pluck('id')->toArray();
     }
 
+    public function getTerms()
+    {
+        return Rule::where('users_id', $this->id)->first()->terms;
+    }
+
+    public function getPolicy()
+    {
+        return Rule::where('users_id', $this->id)->first()->policy;
+    }
+    
     public function getPaginate()
     {
         return Rule::where('users_id', $this->id)->first()->pagination;

@@ -18,15 +18,15 @@ use App\Http\Controllers\EunomiaController;
 Route::post('eunomia/register', [EunomiaController::class, 'register']);
 Route::post('eunomia/login', [EunomiaController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
-	Route::get('eunomia', [EunomiaController::class, 'show']);
-	Route::post('eunomia', [EunomiaController::class, 'update']);
-	Route::post('eunomia/rule', [EunomiaController::class, 'rule']);
-	Route::post('eunomia/logout', [EunomiaController::class, 'logout']);
+    Route::post('eunomia/logout', [EunomiaController::class, 'logout']);
+	Route::get('eunomia', [EunomiaController::class, 'getUserDetails']);
+	Route::post('eunomia', [EunomiaController::class, 'updateSelf']);
+	Route::post('eunomia/rule', [EunomiaController::class, 'updateRule']);
 });
 Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {
-	Route::get('eunomia/all', [EunomiaController::class, 'showAll']);
-	Route::post('eunomia/{user}', [EunomiaController::class, 'update']);
-	Route::delete('eunomia/{user}', [EunomiaController::class, 'delete']);
+	Route::get('eunomia/users', [EunomiaController::class, 'getAllUsers']);
+	Route::post('eunomia/{user}', [EunomiaController::class, 'updateUser']);
+	Route::delete('eunomia/{user}', [EunomiaController::class, 'deleteUserAccount']);
 });
 
 use App\Http\Controllers\ZeusController;
