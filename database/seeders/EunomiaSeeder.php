@@ -12,14 +12,9 @@ class EunomiaSeeder extends Seeder
 
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        User::factory(self::$EUNOMIA_ROW)->create();
-        Rule::factory(self::$EUNOMIA_ROW)->create();
+        // Create users and link them to rules
+        User::factory(self::$EUNOMIA_ROW)->create()->each(function ($user) {
+            Rule::factory()->create(['users_id' => $user->id]);
+        });
     }
 }

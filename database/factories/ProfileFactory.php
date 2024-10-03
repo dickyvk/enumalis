@@ -18,13 +18,13 @@ class ProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'users_id' => fake()->numberBetween(1, User::count()),
+            'users_id' => User::count() ? fake()->numberBetween(1, User::count()) : null,
             'name' => fake()->name(),
             'place_of_birth' => fake()->city(),
             'date_of_birth' => fake()->dateTimeThisCentury()->format('Y-m-d'),
-            'gender' => fake()->numberBetween($min = 1, $max = 2),
-            'blood_type' => fake()->numberBetween($min = 1, $max = 4),
-            'identity_type' => fake()->numberBetween($min = 1, $max = 2),
+            'gender' => fake()->numberBetween(1, 2), // Assuming 1 = Male, 2 = Female
+            'blood_type' => fake()->numberBetween(1, 4), // Assuming 1 = A, 2 = B, 3 = AB, 4 = O
+            'identity_type' => fake()->numberBetween(1, 2), // Assuming 1 = KTP, 2 = Passport
             'identity_number' => fake()->numerify('3273############'),
         ];
     }

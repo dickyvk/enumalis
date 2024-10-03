@@ -15,6 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         DB::connection('mysql')->statement('CREATE DATABASE IF NOT EXISTS '.$this->connection);
+
         Schema::create('failed_jobs', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique();
@@ -24,11 +25,13 @@ return new class extends Migration
             $table->longText('exception');
             $table->timestamp('failed_at')->useCurrent();
         });
+
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
+
         Schema::dropIfExists('personal_access_tokens');
         Schema::create('personal_access_tokens', function (Blueprint $table) {
             $table->id();
@@ -40,6 +43,7 @@ return new class extends Migration
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('uid')->unique();
@@ -49,6 +53,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
         Schema::create('rules', function (Blueprint $table) {
             $table->foreignId('users_id')->unique()->constrained()->onDelete('cascade');
             $table->boolean('terms')->default(0);
@@ -63,6 +68,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('rules', function (Blueprint $table) {
+            $table->dropForeign(['users_id']); // Drop the foreign key constraint first
+        });
+
         Schema::dropIfExists('failed_jobs');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('personal_access_tokens');

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -12,11 +11,6 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
-
-    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
@@ -24,11 +18,35 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'uid' => Str::random(35),
-            'email' => fake()->optional()->safeEmail(),
-            'phone' => fake()->optional()->phoneNumber(),
-            'type' => fake()->numberBetween($min = 0, $max = 2),
+            'uid' => (string) Str::uuid(), // Use UUID instead of random string
+            'email' => fake()->unique()->optional()->safeEmail(),
+            'phone' => fake()->unique()->optional()->phoneNumber(),
+            'type' => fake()->numberBetween(0, 2), // Assuming 0, 1, 2 are user types
             'remember_token' => Str::random(10),
         ];
+    }
+
+    /**
+     * States for different user types.
+     */
+    public function admin()
+    {
+        return $this->state([
+            'type' => 2, // Assuming 2 is admin
+        ]);
+    }
+
+    public function master()
+    {
+        return $this->state([
+            'type' => 1, // Assuming 1 is master
+        ]);
+    }
+
+    public function regular()
+    {
+        return $this->state([
+            'type' => 0, // Assuming 0 is regular user
+        ]);
     }
 }

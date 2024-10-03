@@ -42,9 +42,14 @@ class Profile extends Model
         );
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
+
     public function ownedBy(User $user): bool
     {
-        return $this->users_id == $user->id;
+        return $this->user->id == $user->id;
     }
 
     public function getAccessCategoriesId()

@@ -12,12 +12,15 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $connection = 'eunomia';
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that are mass assignable.
@@ -54,29 +57,40 @@ class User extends Authenticatable
             get: fn ($value) =>  ['user', 'master', 'admin'][$value],
         );
     }
-    
+
+    /**
+     * Get all profiles associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function profiles(): HasMany
     {
         return $this->hasMany(Profile::class, 'users_id');
     }
-
     public function getProfilesId()
     {
-        return $this->profiles()->pluck('id')->toArray();
+        return $this->profiles->pluck('id')->toArray();
     }
 
+    /**
+     * Get all rules associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function rule(): HasOne
+    {
+        return $this->hasOne(Rule::class, 'users_id');
+    }
     public function getTerms()
     {
-        return Rule::where('users_id', $this->id)->first()->terms;
+        return $this->rule->terms ?? null;
     }
-
     public function getPolicy()
     {
-        return Rule::where('users_id', $this->id)->first()->policy;
+        return $this->rule->policy ?? null;
     }
-    
     public function getPaginate()
     {
-        return Rule::where('users_id', $this->id)->first()->pagination;
+        return $this->rule->pagination ?? null;
     }
 }
