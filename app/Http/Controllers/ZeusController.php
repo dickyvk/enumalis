@@ -4,160 +4,203 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\PersonalAccessToken;
-use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Profile;
 use App\Models\Notification;
+use Illuminate\Support\Facades\DB;
 
 class ZeusController extends Controller
 {
-    public function setProfile(Request $request, Profile $profile = NULL)
+    /**
+     * Set or update the user's profile.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Profile|null  $profile
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function setProfile(Request $request, Profile $profile = null)
     {
-        if(!$profile)
-        {
-            $validator = Validator::make($request->all(),[
-                'name' => 'required|string|max:255',
-                'place_of_birth' => 'nullable|string|max:255',
-                'date_of_birth' => 'required|date_format:Y-m-d',
-                'gender' => 'nullable|integer|between:1,2',
-                'blood_type' => 'nullable|integer|between:1,4',
-                'identity_type' => 'nullable|integer|between:1,2',
-                'identity_number' => 'nullable|sometimes|string|max:16|unique:zeus.profiles',
-            ]);
+        $user = Auth::user(); // Get the authenticated user
 
-            if($validator->fails()){
-                return response()->json(['message' => $validator->errors()->first()], 400);
-            }
+        // Define validation rules for profile data
+        $validationRules = [
+            'name' => 'required|string|max:255',
+            'place_of_birth' => 'nullable|string|max:255',
+            'date_of_birth' => 'required|date_format:Y-m-d',
+            'gender' => 'nullable|integer|between:1,2',
+            'blood_type' => 'nullable|integer|between:1,4',
+            'identity_type' => 'nullable|integer|between:1,2',
+            'identity_number' => 'nullable|string|max:16|unique:zeus.profiles' . ($profile ? ',identity_number,' . $profile->id : ''),
+        ];
 
-            $token = PersonalAccessToken::findToken($request->bearerToken());
-            $user = $token->tokenable;
-            $profile = Profile::create(array_merge($request->all(), ['users_id' => $user->id]));
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), $validationRules);
 
-            return response()->json($profile, 201);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 400);
         }
-        else
-        {
-            $validator = Validator::make($request->all(),[
-                'name' => 'nullable|string|max:255',
-                'place_of_birth' => 'nullable|string|max:255',
-                'date_of_birth' => 'nullable|date_format:Y-m-d',
-                'gender' => 'nullable|integer|between:1,2',
-                'blood_type' => 'nullable|integer|between:1,4',
-                'identity_type' => 'nullable|integer|between:1,2',
-                'identity_number' => 'nullable|sometimes|string|max:16|unique:zeus.profiles',
-            ]);
 
-            if($validator->fails()){
-                return response()->json(['message' => $validator->errors()->first()], 400);
-            }
-            
-            $profile->update($request->all());
-
-            return response()->json($profile, 200);
+        // If profile is not provided, create a new one
+        if (is_null($profile)) {
+            $profileData = array_merge($request->all(), ['users_id' => $user->id]);
+            $profile = Profile::create($profileData);
+            return response()->json(['message' => 'Profile created successfully.', 'data' => $profile], 201);
         }
+
+        // Update the existing profile
+        $profile->update($request->all());
+        return response()->json(['message' => 'Profile updated successfully.', 'data' => $profile], 200);
     }
 
-    public function getProfile(Request $request)
+    /**
+     * Retrieve the authenticated user's profiles.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getProfile(): \Illuminate\Http\JsonResponse
     {
-        $token = PersonalAccessToken::findToken($request->bearerToken());
-        $user = $token->tokenable;
-        $profile = Profile::where('users_id', $user->id)->get();
+        $user = Auth::user(); // Get the authenticated user
+        $profiles = Profile::where('users_id', $user->id)->get();
 
-        return response()->json($profile, 200);
+        return response()->json(['message' => 'Profiles retrieved successfully.', 'data' => $profiles], 200);
     }
 
-    public function deleteProfile(Profile $profile)
+    /**
+     * Delete a specific profile.
+     *
+     * @param  \App\Models\Profile  $profile
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteProfile(Profile $profile): \Illuminate\Http\JsonResponse
     {
         $profile->delete();
-
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Profile deleted successfully.'], 200);
     }
 
-    public function sendNotification(Request $request)
+    /**
+     * Send a notification to a specific profile.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendNotification(Request $request): \Illuminate\Http\JsonResponse
     {
-        $validator = Validator::make($request->all(),[
-            'profiles_id' => 'required|integer',
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), [
+            'profiles_id' => 'required|integer|exists:zeus.profiles,id',
             'title' => 'required|string',
             'body' => 'required|string',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first()], 400);
         }
 
+        // Create the notification
         $notification = Notification::create($request->all());
-
-        return response()->json($notification, 201);
+        return response()->json(['message' => 'Notification sent successfully.', 'data' => $notification], 201);
     }
 
-    public function blastNotification(Request $request)
+    /**
+     * Blast a notification to all profiles.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function blastNotification(Request $request): \Illuminate\Http\JsonResponse
     {
-        $validator = Validator::make($request->all(),[
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'body' => 'required|string',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first()], 400);
         }
 
-        $data = [];
-        $profiles = Profile::get();
-        foreach($profiles as $profile)
-        {
-            $data[] = [
+        // Get all profiles and prepare notifications
+        $profiles = Profile::all();
+        $notifications = $profiles->map(function ($profile) use ($request) {
+            return [
                 'profiles_id' => $profile->id,
                 'title' => $request->title,
                 'body' => $request->body,
-                'opened' => 0,
+                'opened' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-        }
+        });
 
-        foreach(array_chunk($data, 1000) as $chunk)
-        {
-            Notification::insert($chunk);
-        }
+        // Insert notifications in chunks to the database
+        DB::transaction(function () use ($notifications) {
+            Notification::insert($notifications->chunk(1000)->toArray());
+        });
 
-        return response()->json(null, 201);
+        return response()->json(['message' => 'Notifications blasted successfully.'], 201);
     }
 
-    public function getNotification(Request $request)
+    /**
+     * Retrieve notifications for the authenticated user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getNotification(Request $request): \Illuminate\Http\JsonResponse
     {
-        $token = PersonalAccessToken::findToken($request->bearerToken());
-        $user = $token->tokenable;
-        $profile = Profile::where('users_id', $user->id)->get('id');
-        $notification = Notification::whereIn('profiles_id', $profile)->orderBy('created_at', 'DESC')->get();
+        $user = Auth::user(); // Get the authenticated user
+        $profileIds = Profile::where('users_id', $user->id)->pluck('id');
+        $notifications = Notification::whereIn('profiles_id', $profileIds)
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
-        return response()
-            ->json($notification);
+        return response()->json(['message' => 'Notifications retrieved successfully.', 'data' => $notifications], 200);
     }
 
-    public function showNotification(Notification $notification)
+    /**
+     * Show a specific notification.
+     *
+     * @param  \App\Models\Notification  $notification
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showNotification(Notification $notification): \Illuminate\Http\JsonResponse
     {
-        return $notification;
+        return response()->json(['message' => 'Notification retrieved successfully.', 'data' => $notification], 200);
     }
 
-    public function readNotification(Request $request, Notification $notification)
+    /**
+     * Mark a notification as read or update its status.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Notification  $notification
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function readNotification(Request $request, Notification $notification): \Illuminate\Http\JsonResponse
     {
-        $validator = Validator::make($request->all(),[
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), [
             'opened' => 'required|boolean',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first()], 400);
         }
-        
-        $notification->update($request->all());
 
-        return response()->json($notification, 200);
+        // Update the notification status
+        $notification->update($request->only('opened'));
+        return response()->json(['message' => 'Notification updated successfully.', 'data' => $notification], 200);
     }
 
-    public function deleteNotification(Notification $notification)
+    /**
+     * Delete a specific notification.
+     *
+     * @param  \App\Models\Notification  $notification
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteNotification(Notification $notification): \Illuminate\Http\JsonResponse
     {
         $notification->delete();
-
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Notification deleted successfully.'], 200);
     }
 }

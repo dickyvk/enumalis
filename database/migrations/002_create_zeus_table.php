@@ -15,6 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         DB::connection('mysql')->statement('CREATE DATABASE IF NOT EXISTS '.$this->connection);
+
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('users_id')->constrained(table: 'eunomia.users')->onDelete('cascade');
@@ -29,7 +30,7 @@ return new class extends Migration
         });
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('profiles_id')->constrained(table: 'zeus.profiles')->onDelete('cascade');
+            $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
             $table->text('title')->nullable();
             $table->text('body');
             $table->boolean('opened')->default(0);

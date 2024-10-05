@@ -14,17 +14,23 @@ use Exception;
 
 class EunomiaController extends Controller
 {
+    /**
+     * Register a new user and create a corresponding rule.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(Request $request)
     {
         // Validation
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'uid' => 'required|string|max:255|unique:eunomia.users',
             'email' => 'nullable|sometimes|email|max:255|unique:eunomia.users',
             'phone' => 'nullable|sometimes|string|max:255|unique:eunomia.users',
         ]);
 
         // Return validation errors
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first()], 400);
         }
 
@@ -55,6 +61,12 @@ class EunomiaController extends Controller
         }
     }
 
+    /**
+     * Log in a user by uid.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request)
     {
         // Validate that 'uid' is provided
@@ -83,6 +95,12 @@ class EunomiaController extends Controller
         }
     }
 
+    /**
+     * Log out the authenticated user.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout(Request $request)
     {
         try {
@@ -99,6 +117,12 @@ class EunomiaController extends Controller
         }
     }
 
+    /**
+     * Retrieve the details of the authenticated user.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getUserDetails(Request $request)
     {
         try {
@@ -113,6 +137,12 @@ class EunomiaController extends Controller
         }
     }
 
+    /**
+     * Update the authenticated user's information.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateSelf(Request $request)
     {
         // Validate input for the authenticated user
@@ -143,6 +173,13 @@ class EunomiaController extends Controller
         }
     }
 
+    /**
+     * Update a specific user's information by user ID.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateUser(Request $request, $userId)
     {
         // Validate input for the specified user
@@ -175,6 +212,13 @@ class EunomiaController extends Controller
         }
     }
 
+    /**
+     * Delete a specific user's account.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\User $user
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deleteUserAccount(Request $request, User $user)
     {
         DB::beginTransaction(); // Start the transaction
@@ -196,6 +240,12 @@ class EunomiaController extends Controller
         }
     }
 
+    /**
+     * Retrieve a list of all users.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getAllUsers(Request $request)
     {
         try {
@@ -209,6 +259,12 @@ class EunomiaController extends Controller
         }
     }
 
+    /**
+     * Update rules for the authenticated user.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateRule(Request $request)
     {
         // Validate input for the authenticated user
