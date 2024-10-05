@@ -51,6 +51,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->tinyInteger('type')->default(0);
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -59,6 +60,7 @@ return new class extends Migration
             $table->boolean('terms')->default(0);
             $table->boolean('policy')->default(0);
             $table->tinyInteger('pagination')->default(10);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

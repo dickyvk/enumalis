@@ -230,8 +230,8 @@ class EunomiaController extends Controller
                 return response()->json(['message' => 'User not found.'], 404);
             }
 
-            //$rule = Rule::where('users_id', $user->id)->first();
-            $rule = $user->rule;
+            $rule = Rule::where('users_id', $user->id)->first();
+            //$rule = $user->rule;
 
             if (!$rule) {
                 return response()->json(['message' => 'Rule not found.'], 404);

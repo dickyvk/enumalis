@@ -19,8 +19,8 @@ class UserFactory extends Factory
     {
         return [
             'uid' => (string) Str::uuid(), // Use UUID instead of random string
-            'email' => fake()->unique()->optional()->safeEmail(),
-            'phone' => fake()->unique()->optional()->phoneNumber(),
+            'email' => fake()->optional()->safeEmail(),
+            'phone' => fake()->optional()->phoneNumber(),
             'type' => fake()->numberBetween(0, 2), // Assuming 0, 1, 2 are user types
             'remember_token' => Str::random(10),
         ];

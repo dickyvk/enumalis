@@ -12,6 +12,7 @@ class Rule extends Model
 
     protected $connection = 'eunomia';
     protected $primaryKey = 'users_id'; // Primary key is set to users_id
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'users_id',
