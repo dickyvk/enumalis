@@ -31,7 +31,7 @@ class User extends Authenticatable
         'uid',
         'email',
         'phone',
-        'type',
+        'role',
     ];
 
     /**
@@ -41,19 +41,19 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'uid',
-        'type',
+        'role',
         'remember_token',
     ];
 
     /**
-     * Interact with the user's type.
+     * Interact with the user's role.
      *
-     * This attribute casts the type integer to a string representation.
+     * This attribute casts the role integer to a string representation.
      *
      * @param  string  $value
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
-    protected function type(): Attribute
+    protected function role(): Attribute
     {
         return new Attribute(
             get: fn ($value) =>  ['user', 'master', 'admin'][$value],

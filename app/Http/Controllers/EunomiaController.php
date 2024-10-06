@@ -187,7 +187,7 @@ class EunomiaController extends Controller
             'uid' => 'nullable|sometimes|string|max:255|unique:eunomia.users,uid,' . $userId, // Allow masters to change uid
             'email' => 'nullable|sometimes|email|max:255|unique:eunomia.users,email,' . $userId,
             'phone' => 'nullable|sometimes|string|max:255|unique:eunomia.users,phone,' . $userId,
-            'type' => 'nullable|sometimes|integer', // Allow masters to change type
+            'role' => 'nullable|sometimes|integer', // Allow masters to change role
         ]);
 
         if ($validator->fails()) {

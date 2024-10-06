@@ -63,7 +63,7 @@ return new class extends Migration
                 $table->string('uid')->unique();
                 $table->string('email')->nullable();
                 $table->string('phone')->nullable();
-                $table->tinyInteger('type')->default(0);
+                $table->tinyInteger('role')->default(0);
                 $table->rememberToken();
                 $table->softDeletes();
                 $table->timestamps();

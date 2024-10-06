@@ -21,32 +21,32 @@ class UserFactory extends Factory
             'uid' => (string) Str::uuid(), // Use UUID instead of random string
             'email' => fake()->optional()->safeEmail(),
             'phone' => fake()->optional()->phoneNumber(),
-            'type' => fake()->numberBetween(0, 2), // Assuming 0, 1, 2 are user types
+            'role' => fake()->numberBetween(0, 2), // Assuming 0, 1, 2 are user roles
             'remember_token' => Str::random(10),
         ];
     }
 
     /**
-     * States for different user types.
+     * States for different user roles.
      */
     public function admin()
     {
         return $this->state([
-            'type' => 2, // Assuming 2 is admin
+            'role' => 2, // Assuming 2 is admin
         ]);
     }
 
     public function master()
     {
         return $this->state([
-            'type' => 1, // Assuming 1 is master
+            'role' => 1, // Assuming 1 is master
         ]);
     }
 
     public function regular()
     {
         return $this->state([
-            'type' => 0, // Assuming 0 is regular user
+            'role' => 0, // Assuming 0 is regular user
         ]);
     }
 }

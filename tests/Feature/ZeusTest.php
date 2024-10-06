@@ -168,7 +168,7 @@ class ZeusTest extends TestCase
      */
     public function test_blast_notification()
     {
-        // Create master user with type 1
+        // Create master user with role 1
         $master = User::factory()->master()->create();
         $this->createdUsers[] = $master; // Store created user for cleanup
 

@@ -170,13 +170,13 @@ class EunomiaTest extends TestCase
     /**
      * Test registering a new master user.
      * 
-     * Verifies that the user is registered with the 'master' type.
+     * Verifies that the user is registered with the 'master' role.
      */
     public function test_register_new_master()
     {
         $user = User::factory()->master()->create();
         $this->createdUsers[] = $user; // Store created user for cleanup
-        $this->assertEquals($user->type, 'master'); // Ensure the type is 'master'
+        $this->assertEquals($user->role, 'master'); // Ensure the role is 'master'
     }
 
     /**
