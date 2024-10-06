@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 use App\Models\Profile;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
@@ -108,37 +109,35 @@ class ZeusController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function blastNotification(Request $request): \Illuminate\Http\JsonResponse
+    public function blastNotification(Request $request)
     {
-        // Validate the incoming request data
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string',
+        $request->validate([
+            'title' => 'required|string|max:255',
             'body' => 'required|string',
+            'user_ids' => 'sometimes|array', // Validate user_ids as an optional array
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()->first()], 400);
+        // Retrieve the users to blast notifications to
+        if ($request->has('user_ids')) {
+            // If user_ids are provided, only notify those users
+            $users = User::whereIn('id', $request->user_ids)->get();
+        } else {
+            // If no user_ids are provided, notify all users (or use your existing logic)
+            $users = User::all();
         }
 
-        // Get all profiles and prepare notifications
-        $profiles = Profile::all();
-        $notifications = $profiles->map(function ($profile) use ($request) {
-            return [
-                'profiles_id' => $profile->id,
-                'title' => $request->title,
-                'body' => $request->body,
-                'opened' => false,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-        });
+        foreach ($users as $user) {
+            foreach ($user->profiles as $profile) {
+                Notification::create([
+                    'profiles_id' => $profile->id,
+                    'title' => $request->input('title'),
+                    'body' => $request->input('body'),
+                    'opened' => 0,
+                ]);
+            }
+        }
 
-        // Insert notifications in chunks to the database
-        DB::transaction(function () use ($notifications) {
-            Notification::insert($notifications->chunk(1000)->toArray());
-        });
-
-        return response()->json(['message' => 'Notifications blasted successfully.'], 201);
+        return response()->json(['message' => 'Blast notification sent'], 201);
     }
 
     /**

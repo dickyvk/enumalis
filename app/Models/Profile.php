@@ -26,6 +26,28 @@ class Profile extends Model
         'identity_number',
     ];
 
+    const GENDER_OPTIONS = ['', 'Male', 'Female'];
+    const BLOOD_TYPE_OPTIONS = ['', 'A', 'B', 'AB', 'O'];
+    const IDENTITY_TYPE_OPTIONS = ['', 'Passport', 'KTP'];
+
+    /**
+     * Get the ID of the specified accessor attribute.
+     *
+     * @param string $accessor The name of the accessor to get as an ID.
+     * @return string|null The ID value of the accessor, or null if not found.
+     */
+    public function getAccessorId(string $accessor)
+    {
+        // Check if the accessor exists in the attributes array
+        if (array_key_exists($accessor, $this->attributes)) {
+            return $this->attributes[$accessor];
+        }
+
+        // Return null if the accessor is not found
+        return null;
+    }
+
+
     /**
      * Accessor for the gender attribute.
      * 
@@ -34,7 +56,7 @@ class Profile extends Model
     protected function gender(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  ['', 'Male', 'Female'][$value],
+            get: fn ($value) => self::GENDER_OPTIONS[$value],
         );
     }
 
@@ -43,10 +65,10 @@ class Profile extends Model
      * 
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
-    protected function blood_type(): Attribute
+    protected function bloodType(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  ['', 'A', 'B', 'AB', 'O'][$value],
+            get: fn ($value) => self::BLOOD_TYPE_OPTIONS[$value],
         );
     }
 
@@ -55,10 +77,10 @@ class Profile extends Model
      * 
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
-    protected function identity_type(): Attribute
+    protected function identityType(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  ['', 'Passport', 'KTP'][$value],
+            get: fn ($value) => self::IDENTITY_TYPE_OPTIONS[$value],
         );
     }
 

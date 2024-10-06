@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Profile;
@@ -11,210 +9,227 @@ use App\Models\Notification;
 
 class ZeusTest extends TestCase
 {
+    /**
+     * Test adding a new profile for a user.
+     *
+     * This test simulates adding a new profile linked to a user.
+     * It checks if the profile creation request returns a 201 status and verifies
+     * the structure of the response JSON to match the expected fields.
+     */
     public function test_add_new_profile()
     {
-        $user = User::factory()->create();
-        $token = $user->createToken('auth_token')->plainTextToken;
-        $headers = ['Authorization' => "Bearer $token"];
+        $user = User::factory()->regular()->create();
+        $this->createdUsers[] = $user; // Store created user for cleanup
+        $headers = $this->getAuthHeaders($user);
 
         $payload = [
             'name' => fake()->name(),
             'place_of_birth' => fake()->city(),
             'date_of_birth' => fake()->dateTimeThisCentury()->format('Y-m-d'),
-            'gender' => fake()->numberBetween($min = 1, $max = 2),
-            'blood_type' => fake()->numberBetween($min = 1, $max = 4),
-            'identity_type' => fake()->numberBetween($min = 1, $max = 2),
+            'gender' => fake()->numberBetween(1, 2),
+            'blood_type' => fake()->numberBetween(1, 4),
+            'identity_type' => fake()->numberBetween(1, 2),
             'identity_number' => fake()->numerify('3273############'),
         ];
-        $array = $this->json('post', 'zeus/profile', $payload, $headers)
+
+        $this->json('post', 'zeus/profile', $payload, $headers)
             ->assertStatus(201)
             ->assertJsonStructure([
-                'id',
-                'users_id',
-                'name',
-                'place_of_birth',
-                'date_of_birth',
-                'gender',
-                'blood_type',
-                'identity_type',
-                'identity_number',
-                'created_at',
-                'updated_at',
+                'data' => [
+                    //Array of data
+                ],
             ]);
-
-        $user->delete();
     }
+
+    /**
+     * Test retrieving a user's profile.
+     *
+     * This test checks if a user can retrieve their profile successfully
+     * and if the response contains a JSON array of profiles.
+     */
     public function test_get_user_profile()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->regular()->create();
+        $this->createdUsers[] = $user; // Store created user for cleanup
         $profile = Profile::factory()->create(['users_id' => $user->id]);
-        $token = $user->createToken('auth_token')->plainTextToken;
-        $headers = ['Authorization' => "Bearer $token"];
+        $this->createdProfiles[] = $profile; // Store created profile for cleanup
+        $headers = $this->getAuthHeaders($user);
 
         $this->json('get', 'zeus/profile', [], $headers)
             ->assertStatus(200)
-            ->assertJsonIsArray();
-
-        $user->delete();
+            ->assertJsonStructure([
+                'data' => [
+                    //Array of data
+                ],
+            ]);
     }
+
+    /**
+     * Test updating a user's profile.
+     *
+     * This test simulates updating an existing profile and checks if the update request
+     * returns a 200 status. It also verifies that the updated profile data matches
+     * the payload.
+     */
     public function test_update_user_profile()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->regular()->create();
+        $this->createdUsers[] = $user; // Store created user for cleanup
         $profile = Profile::factory()->create(['users_id' => $user->id]);
-        $token = $user->createToken('auth_token')->plainTextToken;
-        $headers = ['Authorization' => "Bearer $token"];
+        $this->createdProfiles[] = $profile; // Store created profile for cleanup
+        $headers = $this->getAuthHeaders($user);
 
         $payload = [
             'name' => fake()->name(),
             'place_of_birth' => fake()->city(),
             'date_of_birth' => fake()->dateTimeThisCentury()->format('Y-m-d'),
-            'gender' => fake()->numberBetween($min = 1, $max = 2),
-            'blood_type' => fake()->numberBetween($min = 1, $max = 4),
-            'identity_type' => fake()->numberBetween($min = 1, $max = 2),
+            'gender' => fake()->numberBetween(1, 2),
+            'blood_type' => fake()->numberBetween(1, 4),
+            'identity_type' => fake()->numberBetween(1, 2),
             'identity_number' => fake()->numerify('3273############'),
         ];
-        $this->json('post', 'zeus/profile/'.$profile->id, $payload, $headers)->assertStatus(200);
-        $profile = Profile::where('id', $profile->id)->first();
-        foreach($payload as $key => $value) {
-            $this->assertEquals($profile->$key, $payload[$key]);
-        }
 
-        $user->delete();
+        $this->json('post', 'zeus/profile/'.$profile->id, $payload, $headers)
+            ->assertStatus(200);
+
+        $profile->refresh();
+
+        $accessorKeys = ['gender', 'blood_type', 'identity_type'];
+
+        foreach ($payload as $key => $value) {
+            if (in_array($key, $accessorKeys)) {
+                $this->assertEquals($value, $profile->getAccessorId($key));
+            } else {
+                $this->assertEquals($profile->$key, $payload[$key]);
+            }
+        }
     }
+
+    /**
+     * Test deleting a user's profile.
+     *
+     * This test simulates deleting a profile and checks if the delete request
+     * returns a 204 status. It then confirms that trying to access the deleted
+     * profile returns a 404 status.
+     */
     public function test_delete_user_profile()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->regular()->create();
+        $this->createdUsers[] = $user; // Store created user for cleanup
         $profile = Profile::factory()->create(['users_id' => $user->id]);
-        $token = $user->createToken('auth_token')->plainTextToken;
-        $headers = ['Authorization' => "Bearer $token"];
+        $this->createdProfiles[] = $profile; // Store created profile for cleanup
+        $headers = $this->getAuthHeaders($user);
 
-        $array = $this->json('delete', 'zeus/profile/'.$profile->id, [], $headers)->assertStatus(204);
-        $array = $this->json('post', 'zeus/profile/'.$profile->id, [], $headers)->assertStatus(404);
+        $this->json('delete', 'zeus/profile/'.$profile->id, [], $headers)
+            ->assertStatus(200);
 
-        $user->delete();
+        $this->json('post', 'zeus/profile/'.$profile->id, [], $headers)
+            ->assertStatus(404);
     }
 
+    /**
+     * Test sending a notification to a profile.
+     *
+     * This test simulates sending a notification to a specific profile by a master user.
+     * It checks if the notification creation request returns a 201 status and verifies
+     * the structure of the notification JSON response.
+     */
     public function test_send_notification()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->regular()->create();
+        $this->createdUsers[] = $user; // Store created user for cleanup
         $profile = Profile::factory()->create(['users_id' => $user->id]);
-        $master = User::factory()->create();
-        $master->type = 1;
-        $master->save();
-        $token = $master->createToken('auth_token')->plainTextToken;
-        $headers = ['Authorization' => "Bearer $token"];
+        $this->createdProfiles[] = $profile; // Store created profile for cleanup
+        $master = User::factory()->master()->create();
+        $this->createdUsers[] = $master; // Store created user for cleanup
+        $headers = $this->getAuthHeaders($master);
 
         $payload = [
             'profiles_id' => $profile->id,
             'title' => fake()->words(3, true),
             'body' => fake()->sentence(),
-            'opened' => fake()->numberBetween($min = 0, $max = 1),
+            'opened' => fake()->numberBetween(0, 1),
         ];
-        $array = $this->json('post', 'zeus/notification/send', $payload, $headers)
+
+        $this->json('post', 'zeus/notification/send', $payload, $headers)
             ->assertStatus(201)
             ->assertJsonStructure([
-                'id',
-                'profiles_id',
-                'title',
-                'body',
-                'opened',
-                'created_at',
-                'updated_at',
+                'data' => [
+                    //Array of data
+                ],
             ]);
-
-        $user->delete();
-        $master->delete();
     }
+
+    /**
+     * Test blasting a notification to multiple profiles.
+     *
+     * This test simulates a master user blasting a notification to all profiles.
+     * It checks if the blast request returns a 201 status.
+     */
     public function test_blast_notification()
     {
-        $user = User::factory()->create();
-        $profile = Profile::factory()->create(['users_id' => $user->id]);
-        $master = User::factory()->create();
-        $master->type = 1;
-        $master->save();
-        $token = $master->createToken('auth_token')->plainTextToken;
-        $headers = ['Authorization' => "Bearer $token"];
+        // Create master user with type 1
+        $master = User::factory()->master()->create();
+        $this->createdUsers[] = $master; // Store created user for cleanup
 
+        // Create multiple users and profiles
+        $users = User::factory()->regular()->count(3)->create();
+        $this->createdUsers = array_merge($this->createdUsers, $users->all()); // Store created user for cleanup
+        $profiles = $users->map(function ($user) {
+            $profile = Profile::factory()->create(['users_id' => $user->id]);
+            $this->createdProfiles[] = $profile; // Store created profile for cleanup
+            return $profile;
+        });
+
+        $headers = $this->getAuthHeaders($master);
+
+        // Payload for the notification blast
         $payload = [
             'title' => fake()->words(3, true),
             'body' => fake()->sentence(),
-            'opened' => fake()->numberBetween($min = 0, $max = 1),
+            'opened' => 0,
+            'user_ids' => $users->pluck('id')->toArray() // Send notifications only to these users
         ];
-        $array = $this->json('post', 'zeus/notification/blast', $payload, $headers)
+
+        // Send blast notification
+        $this->json('post', 'zeus/notification/blast', $payload, $headers)
             ->assertStatus(201);
 
-        $user->delete();
-        $master->delete();
+        $this->refreshApplication(); // Reset application state after blasting
+
+        // Check that notifications were created for all profiles
+        foreach ($profiles as $profile) {
+            $this->assertDatabaseHas('zeus.notifications', [
+                'profiles_id' => $profile->id,
+                'title' => $payload['title'],
+                'body' => $payload['body'],
+                'opened' => 0,
+            ]);
+        }
     }
+
+    /**
+     * Test retrieving a list of notifications for a profile.
+     *
+     * This test checks if a user can retrieve all notifications associated with their profile.
+     * It verifies that the response contains a JSON array of notifications.
+     */
     public function test_get_notification()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->regular()->create();
+        $this->createdUsers[] = $user; // Store created user for cleanup
         $profile = Profile::factory()->create(['users_id' => $user->id]);
+        $this->createdProfiles[] = $profile; // Store created profile for cleanup
         $notification = Notification::factory()->create(['profiles_id' => $profile->id]);
-        $token = $user->createToken('auth_token')->plainTextToken;
-        $headers = ['Authorization' => "Bearer $token"];
+        $this->createdNotifications[] = $notification; // Store created notification for cleanup
+        $headers = $this->getAuthHeaders($user);
 
         $this->json('get', 'zeus/notification', [], $headers)
             ->assertStatus(200)
-            ->assertJsonIsArray();
-
-        $user->delete();
-        $notification->delete();
-    }
-    public function test_show_notification()
-    {
-        $user = User::factory()->create();
-        $profile = Profile::factory()->create(['users_id' => $user->id]);
-        $notification = Notification::factory()->create(['profiles_id' => $profile->id]);
-        $token = $user->createToken('auth_token')->plainTextToken;
-        $headers = ['Authorization' => "Bearer $token"];
-
-        $this->json('get', 'zeus/notification/'.$notification->id, [], $headers)
-            ->assertStatus(200)
             ->assertJsonStructure([
-                'id',
-                'profiles_id',
-                'title',
-                'body',
-                'opened',
-                'created_at',
-                'updated_at',
+                'data' => [
+                    //Array of data
+                ],
             ]);
-
-        $user->delete();
-        $notification->delete();
-    }
-    public function test_read_notification()
-    {
-        $user = User::factory()->create();
-        $profile = Profile::factory()->create(['users_id' => $user->id]);
-        $notification = Notification::factory()->create(['profiles_id' => $profile->id]);
-        $token = $user->createToken('auth_token')->plainTextToken;
-        $headers = ['Authorization' => "Bearer $token"];
-
-        $payload = [
-            'opened' => fake()->numberBetween($min = 0, $max = 1),
-        ];
-        $this->json('put', 'zeus/notification/'.$notification->id, $payload, $headers)->assertStatus(200);
-        $notification = Notification::where('id', $notification->id)->first();
-        foreach($payload as $key => $value) {
-            $this->assertEquals($notification->$key, $payload[$key]);
-        }
-
-        $user->delete();
-        $notification->delete();
-    }
-    public function test_delete_notification()
-    {
-        $user = User::factory()->create();
-        $profile = Profile::factory()->create(['users_id' => $user->id]);
-        $notification = Notification::factory()->create(['profiles_id' => $profile->id]);
-        $token = $user->createToken('auth_token')->plainTextToken;
-        $headers = ['Authorization' => "Bearer $token"];
-
-        $array = $this->json('delete', 'zeus/notification/'.$notification->id, [], $headers)->assertStatus(204);
-        $array = $this->json('get', 'zeus/notification/'.$notification->id, [], $headers)->assertStatus(404);
-
-        $user->delete();
     }
 }

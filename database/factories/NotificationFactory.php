@@ -18,7 +18,7 @@ class NotificationFactory extends Factory
     public function definition(): array
     {
         return [
-            'profiles_id' => fake()->numberBetween(1, Profile::count()),
+            'profiles_id' => Profile::count() ? fake()->numberBetween(1, Profile::count()) : null,
             'title' => fake()->words(3, true),
             'body' => fake()->sentence(),
             'opened' => fake()->numberBetween($min = 0, $max = 1),

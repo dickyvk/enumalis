@@ -4,15 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Rule extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $connection = 'eunomia';
     protected $primaryKey = 'users_id'; // Primary key is set to users_id
-    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'users_id',
