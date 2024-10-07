@@ -47,6 +47,27 @@ Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function 
 
 use App\Http\Controllers\PhemeController;
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    // Categories
+    Route::get('pheme/categories', [PhemeController::class, 'indexCategories']);
+    Route::post('pheme/categories', [PhemeController::class, 'storeCategory']);
+    Route::put('pheme/categories/{id}', [PhemeController::class, 'updateCategory']);
+    Route::delete('pheme/categories/{id}', [PhemeController::class, 'destroyCategory']);
+
+    // Threads
+    Route::get('pheme/categories/{categoryId}/threads', [PhemeController::class, 'indexThreads']);
+    Route::post('pheme/threads', [PhemeController::class, 'storeThread']);
+    Route::put('pheme/threads/{id}', [PhemeController::class, 'updateThread']);
+    Route::delete('pheme/threads/{id}', [PhemeController::class, 'destroyThread']);
+
+    // Posts
+    Route::get('pheme/threads/{threadId}/posts', [PhemeController::class, 'indexPosts']);
+    Route::post('pheme/posts', [PhemeController::class, 'storePost']);
+    Route::put('pheme/posts/{id}', [PhemeController::class, 'updatePost']);
+    Route::delete('pheme/posts/{id}', [PhemeController::class, 'destroyPost']);
+});
+
+use App\Http\Controllers\PhemeController;
+Route::group(['middleware' => ['auth:sanctum']], function () {
 	/**CATEGORY**/
     Route::get('pheme/{profile}/category/', [PhemeController::class, 'getCategory']);
     Route::get('pheme/{profile}/category/{category}', [PhemeController::class, 'showCategory']);

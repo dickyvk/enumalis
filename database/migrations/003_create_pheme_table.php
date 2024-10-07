@@ -17,6 +17,36 @@ return new class extends Migration
         // Create the database if it doesn't exist
         DB::connection('mysql')->statement('CREATE DATABASE IF NOT EXISTS '.$this->connection);
 
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('threads', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('body');
+            $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::create('tags', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->timestamps();
+        });
+
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->text('body');
+            $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
+            $table->foreignId('thread_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+/*
         // Check and create 'forum_categories' table
         if (!Schema::hasTable('forum_categories')) {
             Schema::create('forum_categories', function (Blueprint $table) {
@@ -81,7 +111,7 @@ return new class extends Migration
                 $table->foreignId('profiles_id')->constrained(table: 'zeus.profiles')->onDelete('cascade');
                 $table->timestamps();
             });
-        }
+        }*/
     }
 
     /**
@@ -89,10 +119,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('forum_threads_read');
+        /*Schema::dropIfExists('forum_threads_read');
         Schema::dropIfExists('forum_categories_access');
         Schema::dropIfExists('forum_posts');
         Schema::dropIfExists('forum_threads');
-        Schema::dropIfExists('forum_categories');
+        Schema::dropIfExists('forum_categories');*/
+
+        Schema::dropIfExists('posts');
+        Schema::dropIfExists('tags');
+        Schema::dropIfExists('threads');
+        Schema::dropIfExists('categories');
     }
 };

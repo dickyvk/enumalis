@@ -114,4 +114,14 @@ class Profile extends Model
     {
         return DB::connection('pheme')->table('forum_categories_access')->where('profiles_id', $this->id)->pluck('categories_id')->toArray();
     }
+
+    public function threads()
+    {
+        return $this->hasMany(Thread::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

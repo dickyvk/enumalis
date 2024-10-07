@@ -2,6 +2,31 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model
+{
+    protected $fillable = ['body', 'profiles_id', 'thread_id'];
+
+    public function profile()
+    {
+        return $this->belongsTo(Profile::class, 'profiles_id');
+    }
+
+    public function thread()
+    {
+        return $this->belongsTo(Thread::class);
+    }
+}
+
+
+
+
+
+
+/*
+namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

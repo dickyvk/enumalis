@@ -2,6 +2,222 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Thread;
+use App\Models\Post;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class PhemeController extends Controller
+{
+    /**
+     * Display a listing of categories.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function indexCategories()
+    {
+        $categories = Category::all();
+        return response()->json(['categories' => $categories], 200);
+    }
+
+    /**
+     * Store a newly created category.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function storeCategory(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $category = Category::create($request->only('name', 'description'));
+        return response()->json(['message' => 'Category created successfully', 'data' => $category], 201);
+    }
+
+    /**
+     * Update the specified category.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateCategory(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $category = Category::findOrFail($id);
+        $category->update($request->only('name', 'description'));
+
+        return response()->json(['message' => 'Category updated successfully', 'data' => $category], 200);
+    }
+
+    /**
+     * Remove the specified category.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroyCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        $category->delete();
+
+        return response()->json(['message' => 'Category deleted successfully'], 200);
+    }
+
+    /**
+     * Display a listing of threads for a given category.
+     *
+     * @param int $categoryId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function indexThreads($categoryId)
+    {
+        $threads = Thread::where('category_id', $categoryId)->with('profile')->get();
+        return response()->json(['threads' => $threads], 200);
+    }
+
+    /**
+     * Store a newly created thread.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function storeThread(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $thread = Thread::create([
+            'title' => $request->title,
+            'body' => $request->body,
+            'profiles_id' => Auth::user()->id, // Assuming user authentication is handled
+            'category_id' => $request->category_id,
+        ]);
+
+        return response()->json(['message' => 'Thread created successfully', 'data' => $thread], 201);
+    }
+
+    /**
+     * Update the specified thread.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateThread(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'sometimes|required|string|max:255',
+            'body' => 'sometimes|required|string',
+        ]);
+
+        $thread = Thread::findOrFail($id);
+        $thread->update($request->only('title', 'body'));
+
+        return response()->json(['message' => 'Thread updated successfully', 'data' => $thread], 200);
+    }
+
+    /**
+     * Remove the specified thread.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroyThread($id)
+    {
+        $thread = Thread::findOrFail($id);
+        $thread->delete();
+
+        return response()->json(['message' => 'Thread deleted successfully'], 200);
+    }
+
+    /**
+     * Display a listing of posts for a given thread.
+     *
+     * @param int $threadId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function indexPosts($threadId)
+    {
+        $posts = Post::where('thread_id', $threadId)->with('profile')->get();
+        return response()->json(['posts' => $posts], 200);
+    }
+
+    /**
+     * Store a newly created post.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function storePost(Request $request)
+    {
+        $request->validate([
+            'body' => 'required|string',
+            'thread_id' => 'required|exists:threads,id',
+        ]);
+
+        $post = Post::create([
+            'body' => $request->body,
+            'profiles_id' => Auth::user()->id, // Assuming user authentication is handled
+            'thread_id' => $request->thread_id,
+        ]);
+
+        return response()->json(['message' => 'Post created successfully', 'data' => $post], 201);
+    }
+
+    /**
+     * Update the specified post.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updatePost(Request $request, $id)
+    {
+        $request->validate([
+            'body' => 'sometimes|required|string',
+        ]);
+
+        $post = Post::findOrFail($id);
+        $post->update($request->only('body'));
+
+        return response()->json(['message' => 'Post updated successfully', 'data' => $post], 200);
+    }
+
+    /**
+     * Remove the specified post.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroyPost($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        return response()->json(['message' => 'Post deleted successfully'], 200);
+    }
+}
+
+
+
+
+
+
+/*
+namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;

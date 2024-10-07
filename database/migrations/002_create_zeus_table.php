@@ -21,7 +21,7 @@ return new class extends Migration
         if (!Schema::hasTable('profiles')) {
             Schema::create('profiles', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('users_id')->constrained(table: 'eunomia.users')->onDelete('cascade');
+                $table->foreignId('users_id')->constrained('eunomia.users')->onDelete('cascade');
                 $table->string('name');
                 $table->string('place_of_birth')->nullable();
                 $table->date('date_of_birth');
@@ -40,7 +40,7 @@ return new class extends Migration
                 $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
                 $table->text('title')->nullable();
                 $table->text('body');
-                $table->boolean('opened')->default(0);
+                $table->timestamp('read_at')->nullable();
                 $table->timestamps();
             });
         }
