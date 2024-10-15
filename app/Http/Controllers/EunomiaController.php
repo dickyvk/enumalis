@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
 use Validator;
 use Auth;
-use App\Models\User;
-use App\Models\Rule;
+use App\Models\Eunomia\User;
+use App\Models\Eunomia\Rule;
 use Exception;
 
 class EunomiaController extends Controller

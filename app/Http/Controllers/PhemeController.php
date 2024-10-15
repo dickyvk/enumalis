@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Thread;
-use App\Models\Post;
+use App\Models\Pheme\Category;
+use App\Models\Pheme\Thread;
+use App\Models\Pheme\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

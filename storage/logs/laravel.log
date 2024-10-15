@@ -2647,3 +2647,173 @@ Did you mean one of these?
 #34 C:\\Users\\Vivi\\work\\enumalis\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #35 {main}
 "} 
+[2024-10-15 20:51:04] local.ERROR: Cannot use App\Http\Controllers\PhemeController as PhemeController because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot use App\\Http\\Controllers\\PhemeController as PhemeController because the name is already in use at C:\\Users\\Vivi\\work\\enumalis\\routes\\api.php:69)
+[stacktrace]
+#0 {main}
+"} 
+[2024-10-15 20:52:24] local.ERROR: Unterminated comment starting line 68 {"exception":"[object] (ParseError(code: 0): Unterminated comment starting line 68 at C:\\Users\\Vivi\\work\\enumalis\\routes\\api.php:68)
+[stacktrace]
+#0 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(511): Illuminate\\Routing\\RouteFileRegistrar->register('C:\\\\Users\\\\Vivi\\\\w...')
+#1 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(465): Illuminate\\Routing\\Router->loadRoutes('C:\\\\Users\\\\Vivi\\\\w...')
+#2 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\RouteRegistrar.php(194): Illuminate\\Routing\\Router->group(Array, 'C:\\\\Users\\\\Vivi\\\\w...')
+#3 C:\\Users\\Vivi\\work\\enumalis\\app\\Providers\\RouteServiceProvider.php(33): Illuminate\\Routing\\RouteRegistrar->group('C:\\\\Users\\\\Vivi\\\\w...')
+#4 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Providers\\RouteServiceProvider->App\\Providers\\{closure}()
+#5 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#6 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(81): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#7 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Object(Closure), Object(Closure))
+#8 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Object(Closure), Array, NULL)
+#9 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider.php(120): Illuminate\\Container\\Container->call(Object(Closure))
+#10 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider.php(45): Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider->loadRoutes()
+#11 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider->Illuminate\\Foundation\\Support\\Providers\\{closure}()
+#12 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#13 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(81): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#14 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Object(Closure), Object(Closure))
+#15 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Object(Closure), Array, NULL)
+#16 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\ServiceProvider.php(119): Illuminate\\Container\\Container->call(Object(Closure))
+#17 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1033): Illuminate\\Support\\ServiceProvider->callBootedCallbacks()
+#18 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1011): Illuminate\\Foundation\\Application->bootProvider(Object(App\\Providers\\RouteServiceProvider))
+#19 [internal function]: Illuminate\\Foundation\\Application->Illuminate\\Foundation\\{closure}(Object(App\\Providers\\RouteServiceProvider), 23)
+#20 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1010): array_walk(Array, Object(Closure))
+#21 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\BootProviders.php(17): Illuminate\\Foundation\\Application->boot()
+#22 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(263): Illuminate\\Foundation\\Bootstrap\\BootProviders->bootstrap(Object(Illuminate\\Foundation\\Application))
+#23 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(447): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#24 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(199): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#25 C:\\Users\\Vivi\\work\\enumalis\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#26 {main}
+"} 
+[2024-10-15 21:41:39] .ERROR: Class "App\Models\Eunomia\User" not found {"exception":"[object] (Error(code: 0): Class \"App\\Models\\Eunomia\\User\" not found at C:\\Users\\Vivi\\work\\enumalis\\app\\Http\\Controllers\\EunomiaController.php:41)
+[stacktrace]
+#0 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php(54): App\\Http\\Controllers\\EunomiaController->register(Object(Illuminate\\Http\\Request))
+#1 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction('register', Array)
+#2 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(259): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\EunomiaController), 'register')
+#3 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(205): Illuminate\\Routing\\Route->runController()
+#4 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Route->run()
+#5 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#6 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#7 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#8 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(159): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#9 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(125): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#10 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(87): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'api', Object(Closure))
+#11 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#12 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#13 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#14 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#15 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#16 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#17 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#18 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#19 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#25 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#26 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#27 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#28 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#29 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#35 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#36 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Testing\\Concerns\\MakesHttpRequests.php(585): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#37 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Testing\\Concerns\\MakesHttpRequests.php(551): Illuminate\\Foundation\\Testing\\TestCase->call('post', 'eunomia/registe...', Array, Array, Array, Array, '{\"uid\":\"983d0c7...')
+#38 C:\\Users\\Vivi\\work\\enumalis\\tests\\Feature\\EunomiaTest.php(26): Illuminate\\Foundation\\Testing\\TestCase->json('post', 'eunomia/registe...', Array)
+#39 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestCase.php(1122): Tests\\Feature\\EunomiaTest->test_register_new_user()
+#40 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Testing\\TestCase.php(61): PHPUnit\\Framework\\TestCase->runTest()
+#41 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestCase.php(654): Illuminate\\Foundation\\Testing\\TestCase->runTest()
+#42 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestRunner.php(104): PHPUnit\\Framework\\TestCase->runBare()
+#43 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestCase.php(488): PHPUnit\\Framework\\TestRunner->run(Object(Tests\\Feature\\EunomiaTest))
+#44 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestSuite.php(340): PHPUnit\\Framework\\TestCase->run()
+#45 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestSuite.php(340): PHPUnit\\Framework\\TestSuite->run()
+#46 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestSuite.php(340): PHPUnit\\Framework\\TestSuite->run()
+#47 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\TextUI\\TestRunner.php(63): PHPUnit\\Framework\\TestSuite->run()
+#48 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\TextUI\\Application.php(198): PHPUnit\\TextUI\\TestRunner->run(Object(PHPUnit\\TextUI\\Configuration\\Configuration), Object(PHPUnit\\Runner\\ResultCache\\DefaultResultCache), Object(PHPUnit\\Framework\\TestSuite))
+#49 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\phpunit(104): PHPUnit\\TextUI\\Application->run(Array)
+#50 {main}
+"} 
+[2024-10-15 21:41:39] .ERROR: Cannot declare class App\Models\User, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\User, because the name is already in use at C:\\Users\\Vivi\\work\\enumalis\\app\\Models\\Eunomia\\User.php:15)
+[stacktrace]
+#0 {main}
+"} 
+[2024-10-15 21:41:39] .ERROR: Cannot declare class App\Models\User, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\User, because the name is already in use at C:\\Users\\Vivi\\work\\enumalis\\app\\Models\\Eunomia\\User.php:15)
+[stacktrace]
+#0 {main}
+"} 
+[2024-10-15 21:43:58] .ERROR: Class "App\Models\Eunomia\User" not found {"exception":"[object] (Error(code: 0): Class \"App\\Models\\Eunomia\\User\" not found at C:\\Users\\Vivi\\work\\enumalis\\app\\Http\\Controllers\\EunomiaController.php:41)
+[stacktrace]
+#0 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php(54): App\\Http\\Controllers\\EunomiaController->register(Object(Illuminate\\Http\\Request))
+#1 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction('register', Array)
+#2 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(259): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\EunomiaController), 'register')
+#3 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(205): Illuminate\\Routing\\Route->runController()
+#4 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Route->run()
+#5 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#6 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#7 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#8 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(159): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#9 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(125): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#10 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(87): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'api', Object(Closure))
+#11 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#12 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#13 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#14 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#15 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#16 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#17 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#18 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#19 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#25 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#26 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#27 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#28 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#29 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#35 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#36 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Testing\\Concerns\\MakesHttpRequests.php(585): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#37 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Testing\\Concerns\\MakesHttpRequests.php(551): Illuminate\\Foundation\\Testing\\TestCase->call('post', 'eunomia/registe...', Array, Array, Array, Array, '{\"uid\":\"d4e97f7...')
+#38 C:\\Users\\Vivi\\work\\enumalis\\tests\\Feature\\EunomiaTest.php(26): Illuminate\\Foundation\\Testing\\TestCase->json('post', 'eunomia/registe...', Array)
+#39 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestCase.php(1122): Tests\\Feature\\EunomiaTest->test_register_new_user()
+#40 C:\\Users\\Vivi\\work\\enumalis\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Testing\\TestCase.php(61): PHPUnit\\Framework\\TestCase->runTest()
+#41 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestCase.php(654): Illuminate\\Foundation\\Testing\\TestCase->runTest()
+#42 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestRunner.php(104): PHPUnit\\Framework\\TestCase->runBare()
+#43 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestCase.php(488): PHPUnit\\Framework\\TestRunner->run(Object(Tests\\Feature\\EunomiaTest))
+#44 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestSuite.php(340): PHPUnit\\Framework\\TestCase->run()
+#45 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestSuite.php(340): PHPUnit\\Framework\\TestSuite->run()
+#46 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\Framework\\TestSuite.php(340): PHPUnit\\Framework\\TestSuite->run()
+#47 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\TextUI\\TestRunner.php(63): PHPUnit\\Framework\\TestSuite->run()
+#48 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\src\\TextUI\\Application.php(198): PHPUnit\\TextUI\\TestRunner->run(Object(PHPUnit\\TextUI\\Configuration\\Configuration), Object(PHPUnit\\Runner\\ResultCache\\DefaultResultCache), Object(PHPUnit\\Framework\\TestSuite))
+#49 C:\\Users\\Vivi\\work\\enumalis\\vendor\\phpunit\\phpunit\\phpunit(104): PHPUnit\\TextUI\\Application->run(Array)
+#50 {main}
+"} 
+[2024-10-15 21:43:59] .ERROR: Cannot declare class App\Models\User, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\User, because the name is already in use at C:\\Users\\Vivi\\work\\enumalis\\app\\Models\\Eunomia\\User.php:15)
+[stacktrace]
+#0 {main}
+"} 
+[2024-10-15 21:43:59] .ERROR: Cannot declare class App\Models\User, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\User, because the name is already in use at C:\\Users\\Vivi\\work\\enumalis\\app\\Models\\Eunomia\\User.php:15)
+[stacktrace]
+#0 {main}
+"} 
+[2024-10-15 21:48:05] .ERROR: Cannot declare class Database\Factories\UserFactory, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class Database\\Factories\\UserFactory, because the name is already in use at C:\\Users\\Vivi\\work\\enumalis\\database\\factories\\Eunomia\\UserFactory.php:11)
+[stacktrace]
+#0 {main}
+"} 
+[2024-10-15 21:48:05] .ERROR: Cannot declare class Database\Factories\UserFactory, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class Database\\Factories\\UserFactory, because the name is already in use at C:\\Users\\Vivi\\work\\enumalis\\database\\factories\\Eunomia\\UserFactory.php:11)
+[stacktrace]
+#0 {main}
+"} 
+[2024-10-15 21:48:05] .ERROR: Cannot declare class Database\Factories\UserFactory, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class Database\\Factories\\UserFactory, because the name is already in use at C:\\Users\\Vivi\\work\\enumalis\\database\\factories\\Eunomia\\UserFactory.php:11)
+[stacktrace]
+#0 {main}
+"} 

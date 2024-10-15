@@ -6,10 +6,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Category;
-use App\Models\Thread;
-use App\Models\Post;
+use App\Models\Eunomia\User;
+use App\Models\Pheme\Category;
+use App\Models\Pheme\Thread;
+use App\Models\Pheme\Post;
 
 class PhemeTest extends TestCase
 {

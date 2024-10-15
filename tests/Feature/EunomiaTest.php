@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use Illuminate\Support\Str;
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Rule;
+use App\Models\Eunomia\User;
+use App\Models\Eunomia\Rule;
 
 class EunomiaTest extends TestCase
 {

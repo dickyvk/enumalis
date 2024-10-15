@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Rule;
+use App\Models\Eunomia\User;
+use App\Models\Eunomia\Rule;
 
 class EunomiaSeeder extends Seeder
 {

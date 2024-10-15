@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Models\User;
-use App\Models\Profile;
-use App\Models\Notification;
+use App\Models\Eunomia\User;
+use App\Models\Zeus\Profile;
+use App\Models\Zeus\Notification;
 use Illuminate\Support\Facades\DB;
 
 class ZeusController extends Controller

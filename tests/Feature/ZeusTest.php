@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\Profile;
-use App\Models\Notification;
+use App\Models\Eunomia\User;
+use App\Models\Zeus\Profile;
+use App\Models\Zeus\Notification;
 
 class ZeusTest extends TestCase
 {

@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Profile;
-use App\Models\Notification;
+use App\Models\Zeus\Profile;
+use App\Models\Zeus\Notification;
 
 class ZeusSeeder extends Seeder
 {

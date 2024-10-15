@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Pheme;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Profile;
-use App\Models\Thread;
+use App\Models\Zeus\Profile;
+use App\Models\Pheme\Thread;
 
 class PostFactory extends Factory
 {
@@ -13,7 +13,7 @@ class PostFactory extends Factory
         return [
             'profiles_id' => fake()->numberBetween(1, Profile::count()),
             'threads_id' => fake()->numberBetween(1, Thread::count()),
-            'content' => fake()->sentence(),
+            'body' => fake()->sentence(),
             'deleted_at' => null,
         ];
     }

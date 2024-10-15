@@ -65,10 +65,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('pheme/posts/{id}', [PhemeController::class, 'updatePost']);
     Route::delete('pheme/posts/{id}', [PhemeController::class, 'destroyPost']);
 });
-
+/*
 use App\Http\Controllers\PhemeController;
 Route::group(['middleware' => ['auth:sanctum']], function () {
-	/**CATEGORY**/
     Route::get('pheme/{profile}/category/', [PhemeController::class, 'getCategory']);
     Route::get('pheme/{profile}/category/{category}', [PhemeController::class, 'showCategory']);
     Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {
@@ -83,9 +82,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     	Route::post('pheme/category/{category}/thread/', [PhemeController::class, 'setThread']);
     	Route::post('pheme/category/{category}/thread/{thread}', [PhemeController::class, 'setThread']);
     });
-    /**END OF CATEGORY**/
 
-    /**THREAD**/
     Route::get('pheme/thread/recent', [PhemeController::class, 'recentThread']);
     Route::get('pheme/thread/unread', [PhemeController::class, 'unreadThread']);
     Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -101,9 +98,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['middleware' => ['auth:sanctum']], function () {
     	Route::post('pheme/thread/{thread}/post', [PhemeController::class, 'setPost']);
     });
-    /**END OF THREAD**/
 
-	/**POST**/
     Route::group(['middleware' => ['auth:sanctum']], function () {
 	    if (config('forum.api.enable_search')) {
 	        Route::post('search', [PhemeController::class, 'search'])->name('search');
@@ -117,5 +112,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::delete('pheme/post/{post}', [PhemeController::class, 'deletePost']);
         Route::post('pheme/post/{post}/restore', [PhemeController::class, 'restorePost']);
     });
-	/**END OF POST**/
-});
+});*/

@@ -1,9 +1,9 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Pheme;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Category;
+use App\Models\Pheme\Category;
 
 class CategoryFactory extends Factory
 {
@@ -12,7 +12,7 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->words(3, true),
+            'name' => fake()->words(3, true),
             'description' => fake()->sentence(),
             'accepts_threads' => fake()->numberBetween($min = 0, $max = 1),
             'thread_count' => 0,

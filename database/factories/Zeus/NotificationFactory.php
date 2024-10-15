@@ -1,9 +1,9 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Zeus;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Profile;
+use App\Models\Zeus\Profile;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Profile>
