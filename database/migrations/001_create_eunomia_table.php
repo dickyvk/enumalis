@@ -73,7 +73,7 @@ return new class extends Migration
         // Check and create 'rules' table
         if (!Schema::hasTable('rules')) {
             Schema::create('rules', function (Blueprint $table) {
-                $table->foreignId('users_id')->unique()->constrained()->onDelete('cascade');
+                $table->foreignId('users_id')->unique()->constrained('users')->onDelete('cascade');
                 $table->boolean('terms')->default(0);
                 $table->boolean('policy')->default(0);
                 $table->tinyInteger('pagination')->default(10);

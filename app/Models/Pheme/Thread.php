@@ -2,30 +2,147 @@
 
 namespace App\Models\Pheme;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Zeus\Profile;
+use App\Models\Pheme\Category;
+use App\Models\Pheme\Post;
+use App\Models\Pheme\Tag;
+use App\Models\Pheme\ThreadHistory;
 
 class Thread extends Model
 {
-    protected $fillable = ['title', 'body', 'profiles_id', 'category_id'];
+    use HasFactory, SoftDeletes;
 
-    public function profile()
-    {
-        return $this->belongsTo(Profile::class, 'profiles_id');
-    }
+    protected $fillable = [
+        'profiles_id',
+        'categories_id',
+        'title',
+        'body',
+        'pinned',
+        'locked',
+        'first_post_id',
+        'last_post_id',
+        'reply_count',
+    ];
 
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
-    }
-
+    /**
+     * Get the category that owns the thread.
+     */
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * Get the profile that created the thread.
+     */
+    public function profile()
+    {
+        return $this->belongsTo(Profile::class);
+    }
+
+    /**
+     * Get the posts for the thread.
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    /**
+     * Get the tags associated with the thread.
+     */
     public function tags()
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class, 'thread_tag');
+    }
+
+    /**
+     * Create a new thread and update the associated category.
+     */
+    public static function createThread(array $data)
+    {
+        // Start a transaction
+        return \DB::transaction(function () use ($data) {
+            // Create the thread
+            $thread = self::create($data);
+
+            // Update category metrics
+            $category = Category::find($data['categories_id']);
+            if($category)
+            {
+                $category->updateThreadIds($data['categories_id']);
+                $category->incrementCounts(0);
+            }
+
+            ThreadHistory::create([
+                'thread_id' => $thread->id,
+                'body' => $thread->body,
+                'edited_by' => $thread->profiles_id,
+                'edited_at' => now(),
+            ]);
+
+            return $thread;
+        });
+    }
+
+    /**
+     * Update the thread and its associated category.
+     */
+    public function updateThread(array $data)
+    {
+        // Start a transaction
+        return \DB::transaction(function () use ($data) {
+            // Save the current state for history if needed
+            ThreadHistory::create([
+                'thread_id' => $this->id,
+                'body' => $this->body,
+                'edited_by' => $this->profiles_id,
+                'edited_at' => now(),
+            ]);
+
+            // Update the thread
+            $this->update($data);
+
+            // Update the category's latest active thread if this thread is the latest one
+            $this->category()->updateLatestActive($this->id);
+        });
+    }
+
+    /**
+     * Scope for getting pinned threads.
+     */
+    public function scopePinned($query)
+    {
+        return $query->where('pinned', true);
+    }
+
+    /**
+     * Scope for getting latest threads.
+     */
+    public function scopeLatest($query)
+    {
+        return $query->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get the latest post date for the thread.
+     */
+    public function latestPostDate()
+    {
+        return $this->posts()->latest()->value('created_at');
+    }
+
+    /**
+     * Get the subscribed threads for a specific profile.
+     */
+    public function scopeSubscribed($query, $profileId)
+    {
+        return $query->whereHas('subscriptions', function ($q) use ($profileId) {
+            $q->where('profiles_id', $profileId);
+        });
     }
 }
 
