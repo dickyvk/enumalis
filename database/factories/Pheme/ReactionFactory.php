@@ -2,10 +2,9 @@
 
 namespace Database\Factories\Pheme;
 
-use App\Models\Pheme\Reaction;
-use App\Models\Pheme\Post;
-use App\Models\Zeus\Profile;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Pheme\Reaction;
+use App\Models\Zeus\Profile;
 
 class ReactionFactory extends Factory
 {
@@ -14,9 +13,10 @@ class ReactionFactory extends Factory
     public function definition()
     {
         return [
-            'type' => $this->faker->randomElement(['upvote', 'like', 'dislike']),
-            'posts_id' => Post::factory(),
             'profiles_id' => Profile::factory(),
+            'reactable_id' => $this->faker->numberBetween(1, 100), // Adjust this according to your existing data
+            'reactable_type' => $this->faker->randomElement(['Thread', 'Post']),
+            'reaction_type' => $this->faker->randomElement(['like', 'dislike']),
         ];
     }
 }

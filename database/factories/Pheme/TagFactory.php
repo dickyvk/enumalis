@@ -2,8 +2,8 @@
 
 namespace Database\Factories\Pheme;
 
-use App\Models\Pheme\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Pheme\Tag;
 
 class TagFactory extends Factory
 {
@@ -12,7 +12,7 @@ class TagFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->unique()->word,
         ];
     }
 }

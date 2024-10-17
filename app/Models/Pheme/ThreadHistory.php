@@ -5,16 +5,19 @@ namespace App\Models\Pheme;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model
+class ThreadHistory extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'threads_id',
+        'body',
+        'edited_by',
+        'edited_at',
     ];
 
-    public function threads()
+    public function thread()
     {
-        return $this->belongsToMany(Thread::class, 'threads_tags', 'tags_id', 'threads_id');
+        return $this->belongsTo(Thread::class, 'threads_id');
     }
 }

@@ -44,9 +44,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::put('zeus/notification/{notification}', [ZeusController::class, 'readNotification']);
 	Route::delete('zeus/notification/{notification}', [ZeusController::class, 'deleteNotification']);
 });
-Route::group(['middleware' => ['auth:sanctum', 'user-access:admin|user-access:master']], function () {
-	Route::post('zeus/notification/send', [ZeusController::class, 'sendNotification']);
-	Route::post('zeus/notification/blast', [ZeusController::class, 'blastNotification']);
+Route::group(['middleware' => ['auth:sanctum', 'user-access:admin']], function () {
+    Route::post('zeus/notification/send', [ZeusController::class, 'sendNotification']);
+    Route::post('zeus/notification/blast', [ZeusController::class, 'blastNotification']);
+});
+Route::group(['middleware' => ['auth:sanctum', 'user-access:master']], function () {
+    Route::post('zeus/notification/send', [ZeusController::class, 'sendNotification']);
+    Route::post('zeus/notification/blast', [ZeusController::class, 'blastNotification']);
 });
 
 use App\Http\Controllers\PhemeController;

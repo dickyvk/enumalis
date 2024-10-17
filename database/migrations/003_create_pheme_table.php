@@ -22,13 +22,9 @@ return new class extends Migration
                 $table->id();
                 $table->string('name');
                 $table->text('description')->nullable();
-                $table->boolean('accepts_threads')->default(0);
-                $table->foreignId('newest_thread_id')->nullable()->constrained('threads')->nullOnDelete();
-                $table->foreignId('latest_active_thread_id')->nullable()->constrained('threads')->nullOnDelete();
-                $table->integer('thread_count')->default(0);
-                $table->integer('post_count')->default(0);
                 $table->boolean('is_private')->default(0);
                 $table->timestamps();
+                $table->softDeletes();
             });
         }
 
@@ -48,11 +44,8 @@ return new class extends Migration
                 $table->foreignId('categories_id')->constrained('categories')->onDelete('cascade');
                 $table->string('title');
                 $table->text('body');
-                $table->boolean('pinned')->default(0);
+                $table->boolean('is_pinned')->default(0);
                 $table->boolean('locked')->default(0);
-                $table->foreignId('first_post_id')->nullable()->constrained('posts')->nullOnDelete();
-                $table->foreignId('last_post_id')->nullable()->constrained('posts')->nullOnDelete();
-                $table->integer('reply_count')->default(0);
                 $table->timestamps();
                 $table->softDeletes();
             });
@@ -61,18 +54,10 @@ return new class extends Migration
         if (!Schema::hasTable('thread_histories')) {
             Schema::create('thread_histories', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('thread_id')->constrained('threads')->onDelete('cascade');
+                $table->foreignId('threads_id')->constrained('threads')->onDelete('cascade');
                 $table->text('body');
                 $table->foreignId('edited_by')->constrained('zeus.profiles');
                 $table->timestamp('edited_at')->useCurrent();
-                $table->timestamps();
-            });
-        }
-
-        if (!Schema::hasTable('threads_read')) {
-            Schema::create('threads_read', function (Blueprint $table) {
-                $table->foreignId('threads_id')->constrained('threads')->onDelete('cascade');
-                $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
                 $table->timestamps();
             });
         }
@@ -89,7 +74,6 @@ return new class extends Migration
             Schema::create('threads_tags', function (Blueprint $table) {
                 $table->foreignId('threads_id')->constrained('threads')->onDelete('cascade');
                 $table->foreignId('tags_id')->constrained('tags')->onDelete('cascade');
-                $table->primary(['threads_id', 'tags_id']);
                 $table->index(['threads_id', 'tags_id']);
                 $table->timestamps();
             });
@@ -104,25 +88,14 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable('moderation_actions')) {
-            Schema::create('moderation_actions', function (Blueprint $table) {
-                $table->id();
-                $table->foreignId('thread_id')->nullable()->constrained('threads')->onDelete('cascade');
-                $table->foreignId('post_id')->nullable()->constrained('posts')->onDelete('cascade');
-                $table->foreignId('moderator_id')->constrained('zeus.profiles');
-                $table->string('action'); // e.g., 'delete', 'lock', 'sticky'
-                $table->text('reason')->nullable();
-                $table->timestamps();
-            });
-        }
-
         if (!Schema::hasTable('posts')) {
             Schema::create('posts', function (Blueprint $table) {
                 $table->id();
-                $table->text('body');
                 $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
-                $table->foreignId('thread_id')->constrained()->onDelete('cascade');
+                $table->foreignId('threads_id')->constrained('threads')->onDelete('cascade');
+                $table->text('body');
                 $table->timestamps();
+                $table->softDeletes();
             });
         }
 
@@ -141,9 +114,23 @@ return new class extends Migration
         if (!Schema::hasTable('reactions')) {
             Schema::create('reactions', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('profile_id')->constrained('zeus.profiles');
-                $table->morphs('reactionable'); // For posts or threads
-                $table->string('type'); // e.g., 'like', 'upvote'
+                $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
+                $table->unsignedBigInteger('reactable_id'); // The ID of the related thread/post
+                $table->string('reactable_type'); // Model type (Thread/Post)
+                $table->string('reaction_type'); // Type of reaction (like, dislike, etc.)
+                $table->index(['reactable_id', 'reactable_type']); // Indexes for polymorphic query efficiency
+                $table->timestamps();
+            });
+        }
+
+        if (!Schema::hasTable('moderation_actions')) {
+            Schema::create('moderation_actions', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('threads_id')->nullable()->constrained('threads')->onDelete('cascade');
+                $table->foreignId('post_id')->nullable()->constrained('posts')->onDelete('cascade');
+                $table->foreignId('moderator_id')->constrained('zeus.profiles');
+                $table->string('action'); // e.g., 'delete', 'lock', 'sticky'
+                $table->text('reason')->nullable();
                 $table->timestamps();
             });
         }
@@ -157,16 +144,6 @@ return new class extends Migration
                 $table->timestamps();
             });
         }
-
-        if (!Schema::hasTable('private_messages')) {
-            Schema::create('private_messages', function (Blueprint $table) {
-                $table->id();
-                $table->foreignId('sender_id')->constrained('zeus.profiles');
-                $table->foreignId('receiver_id')->constrained('zeus.profiles');
-                $table->text('message');
-                $table->timestamps();
-            });
-        }
     }
 
     /**
@@ -174,18 +151,22 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Drop tables in reverse order of creation to avoid foreign key constraints
         Schema::dropIfExists('user_activity_logs');
-        Schema::dropIfExists('post_histories');
-        Schema::dropIfExists('reactions');
-        Schema::dropIfExists('private_messages');
         Schema::dropIfExists('moderation_actions');
-        Schema::dropIfExists('subscriptions');
-        Schema::dropIfExists('taggables');
-        Schema::dropIfExists('tags');
+        Schema::dropIfExists('reactions');
+        Schema::dropIfExists('post_histories');
         Schema::dropIfExists('posts');
-        Schema::dropIfExists('threads_read');
+        Schema::dropIfExists('subscriptions');
+        Schema::dropIfExists('threads_tags');
+        Schema::dropIfExists('tags');
+        Schema::dropIfExists('thread_histories');
         Schema::dropIfExists('threads');
         Schema::dropIfExists('categories_access');
         Schema::dropIfExists('categories');
+
+        // Optionally, drop the 'pheme' database itself if needed
+        DB::connection('mysql')->statement('DROP DATABASE IF EXISTS '.$this->connection);
     }
+
 };
