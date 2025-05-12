@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\DB;
 return new class extends Migration
 {
     protected $connection = 'pheme';
+    protected $databaseName;
+    protected $dependablesNameZeus;
+
+    public function __construct()
+    {
+        $this->databaseName = config('database.connections.' . $this->connection . '.database');
+        $this->dependablesNameZeus = config('database.connections.zeus.database');
+    }
 
     /**
      * Run the migrations.
@@ -15,7 +23,7 @@ return new class extends Migration
     public function up(): void
     {
         // Create the database if it doesn't exist
-        DB::connection('mysql')->statement('CREATE DATABASE IF NOT EXISTS '.$this->connection);
+        DB::connection('mysql')->statement('CREATE DATABASE IF NOT EXISTS '.$this->databaseName);
 
         if (!Schema::hasTable('categories')) {
             Schema::create('categories', function (Blueprint $table) {
@@ -31,7 +39,7 @@ return new class extends Migration
         if (!Schema::hasTable('categories_access')) {
             Schema::create('categories_access', function (Blueprint $table) {
                 $table->foreignId('categories_id')->constrained('categories')->onDelete('cascade');
-                $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
+                $table->foreignId('profiles_id')->constrained($this->dependablesNameZeus.'.profiles')->onDelete('cascade');
                 $table->unique(['categories_id', 'profiles_id']);
                 $table->timestamps();
             });
@@ -40,7 +48,7 @@ return new class extends Migration
         if (!Schema::hasTable('threads')) {
             Schema::create('threads', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
+                $table->foreignId('profiles_id')->constrained($this->dependablesNameZeus.'.profiles')->onDelete('cascade');
                 $table->foreignId('categories_id')->constrained('categories')->onDelete('cascade');
                 $table->string('title');
                 $table->text('body');
@@ -56,7 +64,7 @@ return new class extends Migration
                 $table->id();
                 $table->foreignId('threads_id')->constrained('threads')->onDelete('cascade');
                 $table->text('body');
-                $table->foreignId('edited_by')->constrained('zeus.profiles');
+                $table->foreignId('edited_by')->constrained($this->dependablesNameZeus.'.profiles');
                 $table->timestamp('edited_at')->useCurrent();
                 $table->timestamps();
             });
@@ -82,7 +90,7 @@ return new class extends Migration
         if (!Schema::hasTable('subscriptions')) {
             Schema::create('subscriptions', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
+                $table->foreignId('profiles_id')->constrained($this->dependablesNameZeus.'.profiles')->onDelete('cascade');
                 $table->foreignId('threads_id')->constrained('threads')->onDelete('cascade');
                 $table->timestamps();
             });
@@ -91,7 +99,7 @@ return new class extends Migration
         if (!Schema::hasTable('posts')) {
             Schema::create('posts', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
+                $table->foreignId('profiles_id')->constrained($this->dependablesNameZeus.'.profiles')->onDelete('cascade');
                 $table->foreignId('threads_id')->constrained('threads')->onDelete('cascade');
                 $table->text('body');
                 $table->timestamps();
@@ -105,7 +113,7 @@ return new class extends Migration
                 $table->foreignId('post_id')->constrained('posts')->onDelete('cascade');
                 $table->text('old_body');
                 $table->text('new_body');
-                $table->foreignId('edited_by')->constrained('zeus.profiles'); // User who edited
+                $table->foreignId('edited_by')->constrained($this->dependablesNameZeus.'.profiles'); // User who edited
                 $table->timestamp('edited_at')->useCurrent();
                 $table->timestamps();
             });
@@ -114,7 +122,7 @@ return new class extends Migration
         if (!Schema::hasTable('reactions')) {
             Schema::create('reactions', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('profiles_id')->constrained('zeus.profiles')->onDelete('cascade');
+                $table->foreignId('profiles_id')->constrained($this->dependablesNameZeus.'.profiles')->onDelete('cascade');
                 $table->unsignedBigInteger('reactable_id'); // The ID of the related thread/post
                 $table->string('reactable_type'); // Model type (Thread/Post)
                 $table->string('reaction_type'); // Type of reaction (like, dislike, etc.)
@@ -128,7 +136,7 @@ return new class extends Migration
                 $table->id();
                 $table->foreignId('threads_id')->nullable()->constrained('threads')->onDelete('cascade');
                 $table->foreignId('post_id')->nullable()->constrained('posts')->onDelete('cascade');
-                $table->foreignId('moderator_id')->constrained('zeus.profiles');
+                $table->foreignId('moderator_id')->constrained($this->dependablesNameZeus.'.profiles');
                 $table->string('action'); // e.g., 'delete', 'lock', 'sticky'
                 $table->text('reason')->nullable();
                 $table->timestamps();
@@ -138,7 +146,7 @@ return new class extends Migration
         if (!Schema::hasTable('user_activity_logs')) {
             Schema::create('user_activity_logs', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('profile_id')->constrained('zeus.profiles');
+                $table->foreignId('profile_id')->constrained($this->dependablesNameZeus.'.profiles');
                 $table->string('activity_type'); // e.g., 'post_created', 'thread_created', 'reaction_given'
                 $table->morphs('activityable'); // Tracks which model (thread, post, etc.)
                 $table->timestamps();
@@ -166,7 +174,7 @@ return new class extends Migration
         Schema::dropIfExists('categories');
 
         // Optionally, drop the 'pheme' database itself if needed
-        DB::connection('mysql')->statement('DROP DATABASE IF EXISTS '.$this->connection);
+        DB::connection('mysql')->statement('DROP DATABASE IF EXISTS '.$this->databaseName);
     }
 
 };

@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\DB;
 return new class extends Migration
 {
     protected $connection = 'eunomia';
+    protected $databaseName;
+
+    public function __construct()
+    {
+        $this->databaseName = config('database.connections.' . $this->connection . '.database');
+    }
 
     /**
      * Run the migrations.
@@ -15,7 +21,7 @@ return new class extends Migration
     public function up(): void
     {
         // Create the database if it doesn't exist
-        DB::connection('mysql')->statement('CREATE DATABASE IF NOT EXISTS '.$this->connection);
+        DB::connection('mysql')->statement('CREATE DATABASE IF NOT EXISTS '.$this->databaseName);
 
         // Check and create 'failed_jobs' table
         if (!Schema::hasTable('failed_jobs')) {
@@ -87,9 +93,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('rules', function (Blueprint $table) {
-            $table->dropForeign(['users_id']); // Drop the foreign key constraint first
-        });
+        try {
+            Schema::table('rules', function (Blueprint $table) {
+                $table->dropForeign(['users_id']); // Drop the foreign key constraint first
+            });
+        } catch(Exception $e) {}
 
         Schema::dropIfExists('failed_jobs');
         Schema::dropIfExists('password_reset_tokens');

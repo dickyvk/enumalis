@@ -182,13 +182,24 @@ class EunomiaController extends Controller
      */
     public function updateUser(Request $request, $userId)
     {
-        // Validate input for the specified user
-        $validator = Validator::make($request->all(), [
-            'uid' => 'nullable|sometimes|string|max:255|unique:eunomia.users,uid,' . $userId, // Allow masters to change uid
+        $authUser = Auth::user();
+        $isMaster = $authUser->type === 1; //Check factory if it is indeed type 1 for master
+        $isAdmin = $authUser->type === 2; //Check factory if it is indeed type 2 for admin
+
+        // Define base rules allowed for all roles
+        $rules = [
             'email' => 'nullable|sometimes|email|max:255|unique:eunomia.users,email,' . $userId,
             'phone' => 'nullable|sometimes|string|max:255|unique:eunomia.users,phone,' . $userId,
-            'role' => 'nullable|sometimes|integer', // Allow masters to change role
-        ]);
+        ];
+
+        // If the user is a master or admin, allow changing uid and role
+        if ($isMaster || $isAdmin) {
+            $rules['uid'] = 'nullable|sometimes|string|max:255|unique:eunomia.users,uid,' . $userId;
+            $rules['type'] = 'nullable|sometimes|integer'; // type = role
+        }
+
+        // Validate input for the specified user
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first()], 400);
@@ -202,8 +213,9 @@ class EunomiaController extends Controller
                 return response()->json(['message' => 'User not found.'], 404);
             }
 
-            // Master user can update any field
-            $user->update($request->all());
+            // Only allow updating fields based on role
+            $data = $request->only(array_keys($rules));
+            $user->update($data);
 
             return response()->json(['message' => 'User information updated successfully', 'data' => $user], 200);
 
