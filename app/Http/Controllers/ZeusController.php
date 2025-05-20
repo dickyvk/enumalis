@@ -92,6 +92,7 @@ class ZeusController extends Controller
             'profiles_id' => 'required|integer|exists:zeus.profiles,id',
             'title' => 'required|string',
             'body' => 'required|string',
+            'read_at' => 'nullable|date',
         ]);
 
         if ($validator->fails()) {
@@ -114,31 +115,42 @@ class ZeusController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
-            'user_ids' => 'sometimes|array', // Validate user_ids as an optional array
+            'user_ids' => 'sometimes|array',
+            'user_ids.*' => 'integer|exists:users,id', // Validate each user ID
         ]);
 
-        // Retrieve the users to blast notifications to
+        // Retrieve users in chunks to avoid memory overload
+        $query = User::query();
+
         if ($request->has('user_ids')) {
-            // If user_ids are provided, only notify those users
-            $users = User::whereIn('id', $request->user_ids)->get();
-        } else {
-            // If no user_ids are provided, notify all users (or use your existing logic)
-            $users = User::all();
+            $query->whereIn('id', $request->user_ids);
         }
 
-        foreach ($users as $user) {
-            foreach ($user->profiles as $profile) {
-                Notification::create([
-                    'profiles_id' => $profile->id,
-                    'title' => $request->input('title'),
-                    'body' => $request->input('body'),
-                    'opened' => 0,
-                ]);
+        $now = now()->format('Y-m-d H:i:s');
+        $notifications = [];
+
+        $query->chunk(100, function ($users) use (&$notifications, $request, $now) {
+            foreach ($users as $user) {
+                foreach ($user->profiles as $profile) {
+                    $notifications[] = [
+                        'profiles_id' => $profile->id,
+                        'title' => $request->input('title'),
+                        'body' => $request->input('body'),
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                }
             }
-        }
+        });
+
+        // Insert all notifications at once in chunks to avoid large queries
+        collect($notifications)->chunk(500)->each(function ($chunk) {
+            Notification::insert($chunk->toArray());
+        });
 
         return response()->json(['message' => 'Blast notification sent'], 201);
     }
+
 
     /**
      * Retrieve notifications for the authenticated user.
@@ -179,7 +191,7 @@ class ZeusController extends Controller
     {
         // Validate the incoming request data
         $validator = Validator::make($request->all(), [
-            'opened' => 'required|boolean',
+            'read_at' => 'required|date',
         ]);
 
         if ($validator->fails()) {
@@ -187,7 +199,7 @@ class ZeusController extends Controller
         }
 
         // Update the notification status
-        $notification->update($request->only('opened'));
+        $notification->update($request->only('read_at'));
         return response()->json(['message' => 'Notification updated successfully.', 'data' => $notification], 200);
     }
 

@@ -21,7 +21,9 @@ class NotificationFactory extends Factory
             'profiles_id' => Profile::count() ? fake()->numberBetween(1, Profile::count()) : null,
             'title' => fake()->words(3, true),
             'body' => fake()->sentence(),
-            'opened' => fake()->numberBetween($min = 0, $max = 1),
+            'read_at' => rand(0, 1)
+                ? fake()->dateTimeBetween('-1 year', 'now')
+                : null,
         ];
     }
 }

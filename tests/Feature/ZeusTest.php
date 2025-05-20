@@ -148,7 +148,9 @@ class ZeusTest extends TestCase
             'profiles_id' => $profile->id,
             'title' => fake()->words(3, true),
             'body' => fake()->sentence(),
-            'opened' => fake()->numberBetween(0, 1),
+            'read_at' => rand(0, 1)
+                ? fake()->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s')
+                : null,
         ];
 
         $this->json('post', 'zeus/notification/send', $payload, $headers)
@@ -187,7 +189,6 @@ class ZeusTest extends TestCase
         $payload = [
             'title' => fake()->words(3, true),
             'body' => fake()->sentence(),
-            'opened' => 0,
             'user_ids' => $users->pluck('id')->toArray() // Send notifications only to these users
         ];
 
@@ -203,7 +204,6 @@ class ZeusTest extends TestCase
                 'profiles_id' => $profile->id,
                 'title' => $payload['title'],
                 'body' => $payload['body'],
-                'opened' => 0,
             ]);
         }
     }
